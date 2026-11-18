@@ -3,37 +3,75 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AU Phone - Lockscreen</title>
+  <title>AU Phone</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="phone-frame">
-    <div class="lockscreen">
-      <!-- Status bar -->
+
+    <!-- ===== HOME SCREEN ===== -->
+    <div class="home-screen" id="home-screen">
+      <div class="home-status">
+        <span>Telkomsel</span>
+        <span>📶 🔋 87%</span>
+      </div>
+
+      <div class="app-grid">
+        <button class="app" data-app="chat">
+          <span class="app-icon">💬</span>
+          <span class="app-name">Chat</span>
+        </button>
+        <button class="app" data-app="galeri">
+          <span class="app-icon">🖼️</span>
+          <span class="app-name">Galeri</span>
+        </button>
+        <button class="app" data-app="catatan">
+          <span class="app-icon">📝</span>
+          <span class="app-name">Catatan</span>
+        </button>
+        <button class="app" data-app="telepon">
+          <span class="app-icon">📞</span>
+          <span class="app-name">Telepon</span>
+        </button>
+        <button class="app" data-app="kamera">
+          <span class="app-icon">📷</span>
+          <span class="app-name">Kamera</span>
+        </button>
+        <button class="app" data-app="pengaturan">
+          <span class="app-icon">⚙️</span>
+          <span class="app-name">Pengaturan</span>
+        </button>
+      </div>
+
+      <div class="home-hint">Geser ke bawah untuk kembali ke lockscreen</div>
+    </div>
+
+    <!-- ===== LOCKSCREEN ===== -->
+    <div class="lockscreen" id="lockscreen">
       <div class="status-bar">
         <span class="carrier">Telkomsel</span>
         <span class="icons">📶 🔋 87%</span>
       </div>
 
-      <!-- Jam dan tanggal -->
       <div class="clock-area">
         <div id="clock" class="clock">00:00</div>
         <div id="date" class="date">Senin, 1 Januari 2024</div>
       </div>
 
-      <!-- Tombol bawah: telepon kiri, kamera kanan -->
       <div class="bottom-buttons">
+        <!-- Telepon di kiri -->
         <button id="emergency-btn" class="round-btn emergency" aria-label="Telepon Darurat">
-          <img src="telepon.png" alt="Telepon Darurat" class="btn-icon">
+          <img src="telepon.png" alt="Telepon" class="btn-icon">
         </button>
+        <!-- Kamera di kanan -->
         <button id="camera-btn" class="round-btn" aria-label="Kamera">
           <img src="kamera.png" alt="Kamera" class="btn-icon">
         </button>
       </div>
 
-      <!-- Petunjuk geser -->
       <div class="swipe-hint">Geser ke atas untuk membuka</div>
     </div>
+
   </div>
 
   <script src="script.js"></script>
