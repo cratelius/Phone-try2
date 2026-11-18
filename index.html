@@ -10,7 +10,7 @@
   <div class="phone-frame">
 
     <!-- ===== HOME SCREEN ===== -->
-    <div class="home-screen" id="home-screen">
+    <div class="screen home-screen" id="home-screen">
       <div class="home-status">
         <span>Telkomsel</span>
         <span>📶 🔋 87%</span>
@@ -47,7 +47,7 @@
     </div>
 
     <!-- ===== LOCKSCREEN ===== -->
-    <div class="lockscreen" id="lockscreen">
+    <div class="screen lockscreen" id="lockscreen">
       <div class="status-bar">
         <span class="carrier">Telkomsel</span>
         <span class="icons">📶 🔋 87%</span>
@@ -59,13 +59,11 @@
       </div>
 
       <div class="bottom-buttons">
-        <!-- Telepon di kiri -->
         <button id="emergency-btn" class="round-btn emergency" aria-label="Telepon Darurat">
-          <img src="telepon.png" alt="Telepon" class="btn-icon">
+          <img src="telepon.png" alt="Telepon" class="btn-icon" onerror="this.style.display='none'">
         </button>
-        <!-- Kamera di kanan -->
         <button id="camera-btn" class="round-btn" aria-label="Kamera">
-          <img src="kamera.png" alt="Kamera" class="btn-icon">
+          <img src="kamera.png" alt="Kamera" class="btn-icon" onerror="this.style.display='none'">
         </button>
       </div>
 
@@ -73,7 +71,7 @@
     </div>
 
     <!-- ===== APLIKASI CHAT ===== -->
-    <div class="app-screen" id="chat-screen">
+    <div class="screen app-screen" id="chat-screen">
       <!-- Header Chat -->
       <div class="chat-header">
         <button id="back-to-home" class="back-btn">←</button>
