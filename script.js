@@ -16,24 +16,51 @@ setInterval(updateClock, 1000);
 const lockscreen = document.getElementById('lockscreen');
 const homeScreen = document.getElementById('home-screen');
 
-function unlockScreen() { lockscreen.classList.add('unlocked'); }
-function lockScreen() { lockscreen.classList.remove('unlocked'); }
+function unlockScreen() { 
+  lockscreen.classList.add('unlocked'); 
+}
+function lockScreen() { 
+  lockscreen.classList.remove('unlocked'); 
+}
 
-// Geser Lockscreen (Buka)
-let touchStartY = 0;
-lockscreen.addEventListener('touchstart', (e) => { touchStartY = e.touches[0].clientY; }, { passive: true });
-lockscreen.addEventListener('touchend', (e) => { if (touchStartY - e.changedTouches[0].clientY > 80) unlockScreen(); });
-let mouseStartY = 0, isMouseDown = false;
-lockscreen.addEventListener('mousedown', (e) => { mouseStartY = e.clientY; isMouseDown = true; });
-lockscreen.addEventListener('mouseup', (e) => { if (isMouseDown && mouseStartY - e.clientY > 80) unlockScreen(); isMouseDown = false; });
+// Fungsi untuk mendeteksi geseran (baik mouse maupun sentuhan)
+function addSwipeListener(element, direction, callback) {
+  let startY = 0;
+  let isPointerDown = false;
 
-// Geser Home (Kunci)
-let homeTouchStartY = 0;
-homeScreen.addEventListener('touchstart', (e) => { homeTouchStartY = e.touches[0].clientY; }, { passive: true });
-homeScreen.addEventListener('touchend', (e) => { if (e.changedTouches[0].clientY - homeTouchStartY > 80) lockScreen(); });
-let homeMouseStartY = 0, isHomeMouseDown = false;
-homeScreen.addEventListener('mousedown', (e) => { homeMouseStartY = e.clientY; isHomeMouseDown = true; });
-homeScreen.addEventListener('mouseup', (e) => { if (isHomeMouseDown && e.clientY - homeMouseStartY > 80) lockScreen(); isHomeMouseDown = false; });
+  // Untuk Sentuhan (HP)
+  element.addEventListener('touchstart', (e) => {
+    startY = e.touches[0].clientY;
+  }, { passive: true });
+
+  element.addEventListener('touchend', (e) => {
+    const endY = e.changedTouches[0].clientY;
+    const distance = startY - endY; // Positif = Geser ke atas, Negatif = Geser ke bawah
+
+    if (direction === 'up' && distance > 60) callback();
+    if (direction === 'down' && distance < -60) callback();
+  });
+
+  // Untuk Mouse (Komputer)
+  element.addEventListener('mousedown', (e) => {
+    startY = e.clientY;
+    isPointerDown = true;
+  });
+
+  element.addEventListener('mouseup', (e) => {
+    if (!isPointerDown) return;
+    isPointerDown = false;
+    const endY = e.clientY;
+    const distance = startY - endY;
+
+    if (direction === 'up' && distance > 60) callback();
+    if (direction === 'down' && distance < -60) callback();
+  });
+}
+
+// Terapkan fungsi geser
+addSwipeListener(lockscreen, 'up', unlockScreen);    // Geser ke atas di lockscreen = Buka
+addSwipeListener(homeScreen, 'down', lockScreen);    // Geser ke bawah di home = Kunci
 
 // ===== 3. BUKA APLIKASI DARI HOME =====
 document.querySelectorAll('.app').forEach(app => {
@@ -43,7 +70,7 @@ document.querySelectorAll('.app').forEach(app => {
       document.getElementById('chat-screen').classList.add('active');
     } else if (appName === 'kamera') {
       document.getElementById('camera-screen').classList.add('active');
-      generateMockImage(); // Set gambar awal
+      generateMockImage();
     } else if (appName === 'galeri') {
       document.getElementById('gallery-screen').classList.add('active');
       renderGallery();
@@ -109,28 +136,23 @@ const viewfinder = document.getElementById('camera-viewfinder');
 const shutterBtn = document.getElementById('shutter-btn');
 const flashOverlay = document.getElementById('flash-overlay');
 
-// Array warna sebagai "Foto" dummy (biar ga perlu internet)
 const dummyColors = ['#ff9a9e', '#fecfef', '#a18cd1', '#fbc2eb', '#84fab0', '#8fd3f4', '#cfd9df'];
 let currentPhotoColor = '';
 
 function generateMockImage() {
   currentPhotoColor = dummyColors[Math.floor(Math.random() * dummyColors.length)];
-  // Buat gambar SVG murni menggunakan data URI (tanpa internet)
   viewfinder.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="700"><rect width="100%" height="100%" fill="${currentPhotoColor}"/><text x="50%" y="50%" font-family="sans-serif" font-size="30" fill="white" text-anchor="middle">FOTO SIMULASI</text></svg>`;
 }
 
 shutterBtn.addEventListener('click', () => {
-  // 1. Efek Flash
   flashOverlay.classList.add('active');
   setTimeout(() => flashOverlay.classList.remove('active'), 150);
 
-  // 2. Simpan foto ke LocalStorage
   const fotoUrl = viewfinder.src;
   let savedPhotos = JSON.parse(localStorage.getItem('auPhotos')) || [];
   savedPhotos.unshift(fotoUrl);
   localStorage.setItem('auPhotos', JSON.stringify(savedPhotos));
 
-  // 3. Ganti gambar untuk foto selanjutnya
   setTimeout(() => generateMockImage(), 300);
 });
 
