@@ -1,8 +1,9 @@
+/* ===== RESET & DASAR ===== */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
 body {
@@ -11,6 +12,7 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  overflow: hidden; /* Mencegah scroll di luar ponsel */
 }
 
 /* ===== BINGKAI PONSEL ===== */
@@ -22,10 +24,10 @@ body {
   padding: 12px;
   box-shadow: 0 0 60px rgba(0, 0, 0, 0.8), inset 0 0 4px #444;
   position: relative;
-  overflow: hidden;
+  overflow: hidden; /* Mengunci semua elemen di dalam layar */
 }
 
-/* ===== BASE SCREEN ===== */
+/* ===== BASE SCREEN (Digunakan oleh semua layar) ===== */
 .screen {
   position: absolute;
   top: 12px;
@@ -38,33 +40,39 @@ body {
   overflow: hidden;
 }
 
-/* ===== LOCKSCREEN ===== */
+/* ===== 1. LOCKSCREEN ===== */
 .lockscreen {
   background: linear-gradient(160deg, #0f2027, #203a43, #2c5364);
   color: #fff;
-  z-index: 3;
+  z-index: 3; /* Paling atas */
   transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.lockscreen.unlocked { transform: translateY(-110%); }
 
-/* ===== HOME SCREEN ===== */
+.lockscreen.unlocked {
+  transform: translateY(-110%); /* Animasi geser ke atas */
+}
+
+/* ===== 2. HOME SCREEN ===== */
 .home-screen {
   background: linear-gradient(160deg, #2c5364, #203a43, #0f2027);
   color: #fff;
-  z-index: 1;
+  z-index: 1; /* Paling bawah */
 }
 
-/* ===== APLIKASI ===== */
+/* ===== 3. APLIKASI (Chat, Kamera, Galeri) ===== */
 .app-screen {
   background: #f2f2f7;
   color: #000;
-  z-index: 2;
-  transform: translateY(110%);
+  z-index: 2; /* Di atas home, di bawah lockscreen */
+  transform: translateY(110%); /* Sembunyi di bawah */
   transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.app-screen.active { transform: translateY(0); }
 
-/* ===== ELEMEN UMUM ===== */
+.app-screen.active {
+  transform: translateY(0); /* Muncul ke atas */
+}
+
+/* ===== ELEMEN UMUM (Status Bar) ===== */
 .status-bar, .home-status {
   display: flex;
   justify-content: space-between;
@@ -74,7 +82,7 @@ body {
   opacity: 0.9;
 }
 
-/* ===== LOCKSCREEN ===== */
+/* ===== LOCKSCREEN: Jam & Tombol ===== */
 .clock-area {
   flex: 1;
   display: flex;
@@ -83,65 +91,349 @@ body {
   align-items: center;
   text-align: center;
 }
-.clock { font-size: 76px; font-weight: 200; letter-spacing: 2px; }
-.date { font-size: 16px; margin-top: 8px; opacity: 0.85; }
-.bottom-buttons { display: flex; justify-content: space-between; padding: 0 40px 30px; }
+
+.clock {
+  font-size: 76px;
+  font-weight: 200;
+  letter-spacing: 2px;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+}
+
+.date {
+  font-size: 16px;
+  margin-top: 8px;
+  opacity: 0.85;
+}
+
+.bottom-buttons {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 40px 30px;
+}
+
 .round-btn {
-  width: 48px; height: 48px; border-radius: 50%; border: none;
-  background: rgba(255, 255, 255, 0.18); backdrop-filter: blur(10px);
-  cursor: pointer; display: flex; justify-content: center; align-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.15s, background 0.2s;
 }
-.round-btn:active { transform: scale(0.9); }
-.round-btn.emergency { background: rgba(255, 59, 48, 0.75); }
-.btn-icon { width: 14px; height: 14px; object-fit: contain; filter: invert(1); pointer-events: none; }
-.swipe-hint { text-align: center; font-size: 13px; padding-bottom: 18px; opacity: 0.6; animation: pulse 2s infinite; }
-@keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.9; } }
 
-/* ===== HOME GRID ===== */
+.round-btn:active {
+  transform: scale(0.9);
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.round-btn.emergency {
+  background: rgba(255, 59, 48, 0.75);
+}
+
+.btn-icon {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  filter: invert(1); /* Mengubah gambar hitam jadi putih */
+  pointer-events: none;
+}
+
+.swipe-hint {
+  text-align: center;
+  font-size: 13px;
+  padding-bottom: 18px;
+  opacity: 0.6;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.9; }
+}
+
+/* ===== HOME SCREEN: Grid Aplikasi ===== */
 .app-grid {
-  flex: 1; display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 28px 16px; padding: 48px 28px; align-content: start; overflow-y: auto;
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px 16px;
+  padding: 48px 28px;
+  align-content: start;
+  overflow-y: auto;
 }
-.app { background: transparent; border: none; color: #fff; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; }
+
+.app {
+  background: transparent;
+  border: none;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
 .app-icon {
-  width: 58px; height: 58px; border-radius: 16px; background: rgba(255, 255, 255, 0.16);
-  backdrop-filter: blur(10px); display: flex; justify-content: center; align-items: center; font-size: 28px;
+  width: 58px;
+  height: 58px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28px;
+  transition: transform 0.15s, background 0.2s;
 }
-.app:active .app-icon { transform: scale(0.92); background: rgba(255, 255, 255, 0.3); }
-.app-name { font-size: 12px; opacity: 0.9; }
-.home-hint { text-align: center; font-size: 12px; padding-bottom: 18px; opacity: 0.5; }
 
-/* ===== CHAT ===== */
-.chat-header { display: flex; align-items: center; padding: 16px; background: #fff; border-bottom: 1px solid #ddd; }
-.back-btn { background: none; border: none; font-size: 24px; color: #007aff; cursor: pointer; margin-right: 12px; font-weight: bold; }
-#chat-title { font-size: 18px; font-weight: 600; }
-.chat-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-.chat-list { flex: 1; overflow-y: auto; }
-.chat-item { display: flex; align-items: center; padding: 12px 16px; background: #fff; border-bottom: 1px solid #eee; cursor: pointer; }
-.chat-item:active { background: #e5e5ea; }
-.avatar { width: 44px; height: 44px; border-radius: 50%; background: #ddd; display: flex; justify-content: center; align-items: center; font-size: 22px; margin-right: 12px; }
-.chat-info { flex: 1; }
-.chat-name { font-weight: 600; font-size: 16px; }
-.chat-preview { font-size: 13px; color: #8e8e93; margin-top: 2px; }
-.chat-room { flex: 1; display: flex; flex-direction: column; background: #e5e5ea; overflow: hidden; }
-.chat-messages { flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
-.message { max-width: 75%; padding: 10px 14px; border-radius: 18px; font-size: 15px; line-height: 1.4; word-wrap: break-word; }
-.message.received { background: #fff; align-self: flex-start; border-bottom-left-radius: 4px; }
-.message.sent { background: #007aff; color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
-.chat-input-area { display: flex; padding: 10px; background: #fff; border-top: 1px solid #ddd; }
-#chat-input { flex: 1; padding: 10px 16px; border: 1px solid #ccc; border-radius: 20px; outline: none; font-size: 15px; }
-#send-btn { background: #007aff; color: #fff; border: none; border-radius: 20px; padding: 0 16px; margin-left: 8px; font-weight: 600; cursor: pointer; }
+.app:active .app-icon {
+  transform: scale(0.92);
+  background: rgba(255, 255, 255, 0.3);
+}
 
-/* ===== KAMERA ===== */
-.camera-view { flex: 1; background: #000; position: relative; display: flex; flex-direction: column; overflow: hidden; }
-#camera-viewfinder { width: 100%; height: 100%; object-fit: cover; }
-.camera-controls { position: absolute; bottom: 30px; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 0 30px; z-index: 5; }
-.shutter-btn { width: 70px; height: 70px; border-radius: 50%; background: white; border: 4px solid rgba(255, 255, 255, 0.5); cursor: pointer; transition: transform 0.1s; }
-.shutter-btn:active { transform: scale(0.85); }
-.flash-effect { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: white; opacity: 0; pointer-events: none; z-index: 4; transition: opacity 0.1s; }
-.flash-effect.active { opacity: 1; }
+.app-name {
+  font-size: 12px;
+  opacity: 0.9;
+}
 
-/* ===== GALERI ===== */
-.gallery-content { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 2px; overflow-y: auto; background: #fff; }
-.gallery-content img { width: 100%; height: 110px; object-fit: cover; cursor: pointer; }
-.empty-gallery { grid-column: 1 / -1; text-align: center; padding: 40px; color: #888; }
+.home-hint {
+  text-align: center;
+  font-size: 12px;
+  padding-bottom: 18px;
+  opacity: 0.5;
+}
+
+/* ===== APLIKASI CHAT ===== */
+.chat-header {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #007aff;
+  cursor: pointer;
+  margin-right: 12px;
+  font-weight: bold;
+}
+
+#chat-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.chat-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.chat-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.chat-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.chat-item:active {
+  background: #e5e5ea;
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #ddd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+  margin-right: 12px;
+}
+
+.chat-info {
+  flex: 1;
+}
+
+.chat-name {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.chat-preview {
+  font-size: 13px;
+  color: #8e8e93;
+  margin-top: 2px;
+}
+
+.chat-room {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #e5e5ea;
+  overflow: hidden;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.message {
+  max-width: 75%;
+  padding: 10px 14px;
+  border-radius: 18px;
+  font-size: 15px;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.message.received {
+  background: #fff;
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+.message.sent {
+  background: #007aff;
+  color: #fff;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+.chat-input-area {
+  display: flex;
+  padding: 10px;
+  background: #fff;
+  border-top: 1px solid #ddd;
+}
+
+#chat-input {
+  flex: 1;
+  padding: 10px 16px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  outline: none;
+  font-size: 15px;
+}
+
+#send-btn {
+  background: #007aff;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 0 16px;
+  margin-left: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ===== APLIKASI KAMERA ===== */
+.camera-view {
+  flex: 1;
+  background: #000;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Tag video untuk kamera live */
+#camera-viewfinder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Memenuhi layar tanpa gepeng */
+  z-index: 1;
+}
+
+.flash-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: white;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+  transition: opacity 0.1s;
+}
+
+.flash-effect.active {
+  opacity: 1;
+}
+
+.camera-controls {
+  position: absolute;
+  bottom: 30px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 30px;
+  z-index: 10; /* Pastikan tombol di atas video */
+}
+
+.shutter-btn {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: white;
+  border: 4px solid rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.shutter-btn:active {
+  transform: scale(0.85);
+}
+
+/* ===== APLIKASI GALERI ===== */
+.gallery-content {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  padding: 2px;
+  overflow-y: auto;
+  background: #fff;
+}
+
+.gallery-content img {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.empty-gallery {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px;
+  color: #888;
+}
