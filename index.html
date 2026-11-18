@@ -1,136 +1,201 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AU Phone</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="phone-frame">
+// ===== 1. JAM DAN TANGGAL =====
+function updateClock() {
+  const now = new Date();
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  document.getElementById('clock').textContent = `${hours}:${minutes}`;
 
-    <!-- ===== HOME SCREEN ===== -->
-    <!-- PERHATIKAN: ID home-screen ada di sini -->
-    <div class="screen home-screen" id="home-screen">
-      <div class="home-status">
-        <span>Telkomsel</span>
-        <span>📶 🔋 87%</span>
-      </div>
+  const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+  const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+  document.getElementById('date').textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+}
+updateClock();
+setInterval(updateClock, 1000);
 
-      <div class="app-grid">
-        <button class="app" data-app="chat">
-          <span class="app-icon">💬</span>
-          <span class="app-name">Chat</span>
-        </button>
-        <button class="app" data-app="galeri">
-          <span class="app-icon">🖼️</span>
-          <span class="app-name">Galeri</span>
-        </button>
-        <button class="app" data-app="catatan">
-          <span class="app-icon">📝</span>
-          <span class="app-name">Catatan</span>
-        </button>
-        <button class="app" data-app="telepon">
-          <span class="app-icon">📞</span>
-          <span class="app-name">Telepon</span>
-        </button>
-        <button class="app" data-app="kamera">
-          <span class="app-icon">📷</span>
-          <span class="app-name">Kamera</span>
-        </button>
-        <button class="app" data-app="pengaturan">
-          <span class="app-icon">⚙️</span>
-          <span class="app-name">Pengaturan</span>
-        </button>
-      </div>
+// ===== 2. BUKA & KUNCI LAYAR =====
+const lockscreen = document.getElementById('lockscreen');
+const homeScreen = document.getElementById('home-screen');
 
-      <div class="home-hint">Geser ke bawah untuk kembali ke lockscreen</div>
-    </div>
+function unlockScreen() { lockscreen.classList.add('unlocked'); }
+function lockScreen() { lockscreen.classList.remove('unlocked'); }
 
-    <!-- ===== LOCKSCREEN ===== -->
-    <!-- PERHATIKAN: ID lockscreen ada di sini -->
-    <div class="screen lockscreen" id="lockscreen">
-      <div class="status-bar">
-        <span class="carrier">Telkomsel</span>
-        <span class="icons">📶 🔋 87%</span>
-      </div>
+// Fungsi deteksi geser (Mouse & Touchscreen)
+function addSwipeListener(element, direction, callback) {
+  let startY = 0;
+  let isPointerDown = false;
 
-      <div class="clock-area">
-        <div id="clock" class="clock">00:00</div>
-        <div id="date" class="date">Senin, 1 Januari 2024</div>
-      </div>
+  element.addEventListener('touchstart', (e) => { startY = e.touches[0].clientY; }, { passive: true });
+  element.addEventListener('touchend', (e) => {
+    const endY = e.changedTouches[0].clientY;
+    const distance = startY - endY;
+    if (direction === 'up' && distance > 60) callback();
+    if (direction === 'down' && distance < -60) callback();
+  });
 
-      <div class="bottom-buttons">
-        <button id="emergency-btn" class="round-btn emergency" aria-label="Telepon Darurat">
-          <img src="telepon.png" alt="Telepon" class="btn-icon" onerror="this.style.display='none'">
-        </button>
-        <button id="camera-btn-lockscreen" class="round-btn" aria-label="Kamera">
-          <img src="kamera.png" alt="Kamera" class="btn-icon" onerror="this.style.display='none'">
-        </button>
-      </div>
+  element.addEventListener('mousedown', (e) => { startY = e.clientY; isPointerDown = true; });
+  element.addEventListener('mouseup', (e) => {
+    if (!isPointerDown) return;
+    isPointerDown = false;
+    const endY = e.clientY;
+    const distance = startY - endY;
+    if (direction === 'up' && distance > 60) callback();
+    if (direction === 'down' && distance < -60) callback();
+  });
+}
 
-      <div class="swipe-hint">Geser ke atas untuk membuka</div>
-    </div>
+addSwipeListener(lockscreen, 'up', unlockScreen); // Geser ke atas = Buka
+addSwipeListener(homeScreen, 'down', lockScreen); // Geser ke bawah = Kunci
 
-    <!-- ===== APLIKASI CHAT ===== -->
-    <div class="screen app-screen" id="chat-screen">
-      <div class="chat-header">
-        <button class="back-btn" data-target="chat-screen">←</button>
-        <h2 id="chat-title">Pesan</h2>
-      </div>
-      <div class="chat-content">
-        <div id="chat-list-view" class="chat-list">
-          <div class="chat-item" data-contact="Rian" data-avatar="👦">
-            <div class="avatar">👦</div>
-            <div class="chat-info">
-              <div class="chat-name">Rian</div>
-              <div class="chat-preview">Halo, kamu di mana?</div>
-            </div>
-          </div>
-          <div class="chat-item" data-contact="Dita" data-avatar="👧">
-            <div class="avatar">👧</div>
-            <div class="chat-info">
-              <div class="chat-name">Dita</div>
-              <div class="chat-preview">Jangan lupa bawa buku ya!</div>
-            </div>
-          </div>
-        </div>
-        <div id="chat-room-view" class="chat-room" style="display: none;">
-          <div id="chat-messages" class="chat-messages"></div>
-          <div class="chat-input-area">
-            <input type="text" id="chat-input" placeholder="Ketik pesan...">
-            <button id="send-btn">Kirim</button>
-          </div>
-        </div>
-      </div>
-    </div>
+// ===== 3. BUKA APLIKASI DARI HOME =====
+document.querySelectorAll('.app').forEach(app => {
+  app.addEventListener('click', () => {
+    const appName = app.dataset.app;
+    if (appName === 'chat') {
+      document.getElementById('chat-screen').classList.add('active');
+    } else if (appName === 'kamera') {
+      document.getElementById('camera-screen').classList.add('active');
+      startCamera(); // Nyalakan kamera
+    } else if (appName === 'galeri') {
+      document.getElementById('gallery-screen').classList.add('active');
+      renderGallery(); // Tampilkan foto
+    }
+  });
+});
 
-    <!-- ===== APLIKASI KAMERA ===== -->
-    <div class="screen app-screen" id="camera-screen">
-      <div class="camera-view">
-        <img id="camera-viewfinder" src="" alt="Kamera" style="width: 100%; height: 100%; object-fit: cover;">
-        <div id="flash-overlay" class="flash-effect"></div>
-        <div class="camera-controls">
-          <button class="back-btn" data-target="camera-screen" style="color: white; font-size: 24px;">✕</button>
-          <button id="shutter-btn" class="shutter-btn"></button>
-          <div style="width: 24px;"></div>
-        </div>
-      </div>
-    </div>
+// Tombol Kamera di Lockscreen
+document.getElementById('camera-btn-lockscreen').addEventListener('click', () => {
+  document.getElementById('camera-screen').classList.add('active');
+  startCamera();
+});
 
-    <!-- ===== APLIKASI GALERI ===== -->
-    <div class="screen app-screen" id="gallery-screen">
-      <div class="chat-header">
-        <button class="back-btn" data-target="gallery-screen">←</button>
-        <h2>Galeri</h2>
-      </div>
-      <div class="gallery-content" id="gallery-grid">
-        <!-- Foto akan muncul di sini -->
-      </div>
-    </div>
+// ===== 4. TOMBOL KEMBALI (BACK) =====
+document.querySelectorAll('.back-btn[data-target]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const targetId = btn.dataset.target;
+    document.getElementById(targetId).classList.remove('active');
+    
+    // Jika keluar dari chat, reset tampilan chat
+    if (targetId === 'chat-screen') {
+      document.getElementById('chat-room-view').style.display = 'none';
+      document.getElementById('chat-list-view').style.display = 'block';
+    }
+    // Jika keluar dari kamera, matikan kamera (hemat baterai)
+    if (targetId === 'camera-screen') {
+      stopCamera();
+    }
+  });
+});
 
-  </div>
+// ===== 5. LOGIKA CHAT =====
+const chatListView = document.getElementById('chat-list-view');
+const chatRoomView = document.getElementById('chat-room-view');
+const chatMessages = document.getElementById('chat-messages');
+const chatTitle = document.getElementById('chat-title');
+const chatInput = document.getElementById('chat-input');
+const sendBtn = document.getElementById('send-btn');
 
-  <script src="script.js"></script>
-</body>
-</html>
+document.querySelectorAll('.chat-item').forEach(item => {
+  item.addEventListener('click', () => {
+    chatListView.style.display = 'none';
+    chatRoomView.style.display = 'flex';
+    chatTitle.textContent = `${item.dataset.avatar} ${item.dataset.contact}`;
+    chatMessages.innerHTML = '';
+    addMessage(`Halo, ini ${item.dataset.contact}. Ada apa?`, 'received');
+  });
+});
+
+function addMessage(text, type) {
+  const msgDiv = document.createElement('div');
+  msgDiv.classList.add('message', type);
+  msgDiv.textContent = text;
+  chatMessages.appendChild(msgDiv);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+sendBtn.addEventListener('click', () => {
+  const text = chatInput.value.trim();
+  if (!text) return;
+  addMessage(text, 'sent');
+  chatInput.value = '';
+  setTimeout(() => {
+    let balasan = "Hah? Maksudnya gimana?";
+    if (text.toLowerCase().includes('halo')) balasan = "Halo juga!";
+    else if (text.toLowerCase().includes('dimana')) balasan = "Aku lagi di rumah nih.";
+    addMessage(balasan, 'received');
+  }, 1000);
+});
+chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendBtn.click(); });
+
+// ===== 6. LOGIKA KAMERA ASLI =====
+const video = document.getElementById('camera-viewfinder');
+const shutterBtn = document.getElementById('shutter-btn');
+const flashOverlay = document.getElementById('flash-overlay');
+let stream = null; 
+
+async function startCamera() {
+  try {
+    // Meminta akses kamera (environment = kamera belakang)
+    stream = await navigator.mediaDevices.getUserMedia({ 
+      video: { facingMode: "environment" }, 
+      audio: false 
+    });
+    video.srcObject = stream;
+  } catch (err) {
+    console.error("Kamera gagal dinyalakan:", err);
+    alert("Kamera tidak bisa diakses. Pastikan Anda memberi izin, atau jalankan melalui localhost/HTTPS.");
+  }
+}
+
+function stopCamera() {
+  if (stream) {
+    stream.getTracks().forEach(track => track.stop());
+    video.srcObject = null;
+  }
+}
+
+shutterBtn.addEventListener('click', () => {
+  if (!stream) return;
+
+  flashOverlay.classList.add('active');
+  setTimeout(() => flashOverlay.classList.remove('active'), 150);
+
+  // Gambar dari video ke canvas
+  const canvas = document.createElement('canvas');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+  // Simpan sebagai gambar JPEG (kualitas 80%)
+  const photoDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+
+  let savedPhotos = JSON.parse(localStorage.getItem('auPhotos')) || [];
+  savedPhotos.unshift(photoDataUrl);
+  localStorage.setItem('auPhotos', JSON.stringify(savedPhotos));
+});
+
+// ===== 7. LOGIKA GALERI =====
+const galleryGrid = document.getElementById('gallery-grid');
+
+function renderGallery() {
+  galleryGrid.innerHTML = '';
+  let savedPhotos = JSON.parse(localStorage.getItem('auPhotos')) || [];
+
+  if (savedPhotos.length === 0) {
+    galleryGrid.innerHTML = '<div class="empty-gallery">Belum ada foto.</div>';
+    return;
+  }
+
+  savedPhotos.forEach(photoUrl => {
+    const img = document.createElement('img');
+    img.src = photoUrl;
+    
+    // Fitur Zoom jika foto di-klik
+    img.addEventListener('click', () => {
+      const win = window.open();
+      win.document.write(`<img src="${photoUrl}" style="max-width:100%; max-height:100vh; display:block; margin:auto;">`);
+    });
+    
+    galleryGrid.appendChild(img);
+  });
+}
