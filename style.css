@@ -24,7 +24,7 @@ body {
   position: relative;
 }
 
-/* Layar lockscreen */
+/* ===== LAYAR LOCKSCREEN ===== */
 .lockscreen {
   width: 100%;
   height: 100%;
@@ -108,11 +108,11 @@ body {
 
 /* Ikon gambar di dalam tombol */
 .btn-icon {
-  width: 14px;        /* Ukuran pas, tidak kegedean */
+  width: 14px;
   height: 14px;
   object-fit: contain;
   pointer-events: none;
-  filter: invert(1);  /* Mengubah ikon hitam menjadi putih */
+  filter: invert(1);
 }
 
 /* Petunjuk geser */
@@ -199,4 +199,163 @@ body {
   font-size: 12px;
   padding-bottom: 18px;
   opacity: 0.5;
+}
+
+/* ===== APLIKASI CHAT ===== */
+.app-screen {
+  position: absolute;
+  inset: 12px;
+  border-radius: 30px;
+  background: #f2f2f7;
+  display: flex;
+  flex-direction: column;
+  color: #000;
+  z-index: 3;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.app-screen.active {
+  transform: translateY(0);
+}
+
+/* Header Chat */
+.chat-header {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+  border-radius: 30px 30px 0 0;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #007aff;
+  cursor: pointer;
+  margin-right: 12px;
+  font-weight: bold;
+}
+
+#chat-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Daftar Kontak */
+.chat-content {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.chat-item:active {
+  background: #e5e5ea;
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #ddd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+  margin-right: 12px;
+}
+
+.chat-info {
+  flex: 1;
+}
+
+.chat-name {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.chat-preview {
+  font-size: 13px;
+  color: #8e8e93;
+  margin-top: 2px;
+}
+
+/* Ruang Obrolan */
+.chat-room {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #e5e5ea;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Bubble Pesan */
+.message {
+  max-width: 75%;
+  padding: 10px 14px;
+  border-radius: 18px;
+  font-size: 15px;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.message.received {
+  background: #fff;
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+.message.sent {
+  background: #007aff;
+  color: #fff;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+/* Area Input */
+.chat-input-area {
+  display: flex;
+  padding: 10px;
+  background: #fff;
+  border-top: 1px solid #ddd;
+}
+
+#chat-input {
+  flex: 1;
+  padding: 10px 16px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  outline: none;
+  font-size: 15px;
+}
+
+#send-btn {
+  background: #007aff;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 0 16px;
+  margin-left: 8px;
+  font-weight: 600;
+  cursor: pointer;
 }
