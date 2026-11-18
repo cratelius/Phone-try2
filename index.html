@@ -62,7 +62,7 @@
         <button id="emergency-btn" class="round-btn emergency" aria-label="Telepon Darurat">
           <img src="telepon.png" alt="Telepon" class="btn-icon" onerror="this.style.display='none'">
         </button>
-        <button id="camera-btn" class="round-btn" aria-label="Kamera">
+        <button id="camera-btn-lockscreen" class="round-btn" aria-label="Kamera">
           <img src="kamera.png" alt="Kamera" class="btn-icon" onerror="this.style.display='none'">
         </button>
       </div>
@@ -72,16 +72,11 @@
 
     <!-- ===== APLIKASI CHAT ===== -->
     <div class="screen app-screen" id="chat-screen">
-      <!-- Header Chat -->
       <div class="chat-header">
-        <button id="back-to-home" class="back-btn">←</button>
+        <button class="back-btn" data-target="chat-screen">←</button>
         <h2 id="chat-title">Pesan</h2>
       </div>
-
-      <!-- Konten Chat -->
       <div class="chat-content">
-        
-        <!-- Tampilan Daftar Kontak -->
         <div id="chat-list-view" class="chat-list">
           <div class="chat-item" data-contact="Rian" data-avatar="👦">
             <div class="avatar">👦</div>
@@ -97,26 +92,41 @@
               <div class="chat-preview">Jangan lupa bawa buku ya!</div>
             </div>
           </div>
-          <div class="chat-item" data-contact="Budi" data-avatar="🧑">
-            <div class="avatar">🧑</div>
-            <div class="chat-info">
-              <div class="chat-name">Budi</div>
-              <div class="chat-preview">Nanti kita ketemuan jam 5.</div>
-            </div>
-          </div>
         </div>
-
-        <!-- Tampilan Ruang Obrolan (Awalnya disembunyikan) -->
         <div id="chat-room-view" class="chat-room" style="display: none;">
-          <div id="chat-messages" class="chat-messages">
-            <!-- Pesan akan muncul di sini -->
-          </div>
+          <div id="chat-messages" class="chat-messages"></div>
           <div class="chat-input-area">
             <input type="text" id="chat-input" placeholder="Ketik pesan...">
             <button id="send-btn">Kirim</button>
           </div>
         </div>
+      </div>
+    </div>
 
+    <!-- ===== APLIKASI KAMERA (BARU) ===== -->
+    <div class="screen app-screen" id="camera-screen">
+      <div class="camera-view">
+        <!-- Gambar viewfinder (simulasi) -->
+        <img id="camera-viewfinder" src="https://picsum.photos/400/700?random=1" alt="Viewfinder">
+        
+        <!-- Tombol Shutter -->
+        <div class="camera-controls">
+          <button class="back-btn camera-back" data-target="camera-screen" style="color: white;">✕</button>
+          <button id="shutter-btn" class="shutter-btn"></button>
+          <div style="width: 40px;"></div> <!-- Spacer -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== APLIKASI GALERI (BARU) ===== -->
+    <div class="screen app-screen" id="gallery-screen">
+      <div class="chat-header">
+        <button class="back-btn" data-target="gallery-screen">←</button>
+        <h2>Galeri</h2>
+      </div>
+      <div class="gallery-content" id="gallery-grid">
+        <!-- Foto akan muncul di sini -->
+        <div class="empty-gallery" id="empty-gallery-text">Belum ada foto.</div>
       </div>
     </div>
 
