@@ -10,6 +10,7 @@
   <div class="phone-frame">
 
     <!-- ===== HOME SCREEN ===== -->
+    <!-- PERHATIKAN: ID home-screen ada di sini -->
     <div class="screen home-screen" id="home-screen">
       <div class="home-status">
         <span>Telkomsel</span>
@@ -47,6 +48,7 @@
     </div>
 
     <!-- ===== LOCKSCREEN ===== -->
+    <!-- PERHATIKAN: ID lockscreen ada di sini -->
     <div class="screen lockscreen" id="lockscreen">
       <div class="status-bar">
         <span class="carrier">Telkomsel</span>
@@ -106,17 +108,12 @@
     <!-- ===== APLIKASI KAMERA ===== -->
     <div class="screen app-screen" id="camera-screen">
       <div class="camera-view">
-        <!-- Viewfinder -->
         <img id="camera-viewfinder" src="" alt="Kamera" style="width: 100%; height: 100%; object-fit: cover;">
-        
-        <!-- Efek Flash -->
         <div id="flash-overlay" class="flash-effect"></div>
-
-        <!-- Kontrol Kamera -->
         <div class="camera-controls">
           <button class="back-btn" data-target="camera-screen" style="color: white; font-size: 24px;">✕</button>
           <button id="shutter-btn" class="shutter-btn"></button>
-          <div style="width: 24px;"></div> <!-- Spacer -->
+          <div style="width: 24px;"></div>
         </div>
       </div>
     </div>
