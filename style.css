@@ -108,8 +108,8 @@ body {
 
 /* Ikon gambar di dalam tombol */
 .btn-icon {
-  width: 20px;        /* Ukuran pas, tidak kegedean */
-  height: 20px;
+  width: 14px;        /* Ukuran pas, tidak kegedean */
+  height: 14px;
   object-fit: contain;
   pointer-events: none;
   filter: invert(1);  /* Mengubah ikon hitam menjadi putih */
