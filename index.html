@@ -103,22 +103,25 @@
       </div>
     </div>
 
-    <!-- ===== APLIKASI KAMERA (BARU) ===== -->
+    <!-- ===== APLIKASI KAMERA ===== -->
     <div class="screen app-screen" id="camera-screen">
       <div class="camera-view">
-        <!-- Gambar viewfinder (simulasi) -->
-        <img id="camera-viewfinder" src="https://picsum.photos/400/700?random=1" alt="Viewfinder">
+        <!-- Viewfinder -->
+        <img id="camera-viewfinder" src="" alt="Kamera" style="width: 100%; height: 100%; object-fit: cover;">
         
-        <!-- Tombol Shutter -->
+        <!-- Efek Flash -->
+        <div id="flash-overlay" class="flash-effect"></div>
+
+        <!-- Kontrol Kamera -->
         <div class="camera-controls">
-          <button class="back-btn camera-back" data-target="camera-screen" style="color: white;">✕</button>
+          <button class="back-btn" data-target="camera-screen" style="color: white; font-size: 24px;">✕</button>
           <button id="shutter-btn" class="shutter-btn"></button>
-          <div style="width: 40px;"></div> <!-- Spacer -->
+          <div style="width: 24px;"></div> <!-- Spacer -->
         </div>
       </div>
     </div>
 
-    <!-- ===== APLIKASI GALERI (BARU) ===== -->
+    <!-- ===== APLIKASI GALERI ===== -->
     <div class="screen app-screen" id="gallery-screen">
       <div class="chat-header">
         <button class="back-btn" data-target="gallery-screen">←</button>
@@ -126,7 +129,6 @@
       </div>
       <div class="gallery-content" id="gallery-grid">
         <!-- Foto akan muncul di sini -->
-        <div class="empty-gallery" id="empty-gallery-text">Belum ada foto.</div>
       </div>
     </div>
 
