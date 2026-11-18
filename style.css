@@ -13,7 +13,7 @@ body {
   min-height: 100vh;
 }
 
-/* Bingkai ponsel */
+/* Bingkai ponsel - Ditambahkan overflow: hidden */
 .phone-frame {
   width: 360px;
   height: 720px;
@@ -22,29 +22,63 @@ body {
   padding: 12px;
   box-shadow: 0 0 60px rgba(0, 0, 0, 0.8), inset 0 0 4px #444;
   position: relative;
+  overflow: hidden; /* PENTING: Menahan semua elemen di dalam layar */
 }
 
 /* ===== LAYAR LOCKSCREEN ===== */
 .lockscreen {
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  inset: 12px; /* Menyesuaikan padding bingkai */
   border-radius: 30px;
   background: linear-gradient(160deg, #0f2027, #203a43, #2c5364);
-  position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   color: #fff;
   transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-  z-index: 2;
+  z-index: 3; /* Paling atas */
 }
 
 .lockscreen.unlocked {
-  transform: translateY(-100%);
+  transform: translateY(-110%); /* Geser keluar layar */
 }
 
-/* Status bar */
-.status-bar {
+/* ===== HOME SCREEN ===== */
+.home-screen {
+  position: absolute;
+  inset: 12px;
+  border-radius: 30px;
+  background: linear-gradient(160deg, #2c5364, #203a43, #0f2027);
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+  overflow: hidden;
+  z-index: 1; /* Di bawah lockscreen */
+}
+
+/* ===== APLIKASI CHAT ===== */
+.app-screen {
+  position: absolute;
+  inset: 12px;
+  border-radius: 30px;
+  background: #f2f2f7;
+  display: flex;
+  flex-direction: column;
+  color: #000;
+  z-index: 2; /* Di atas home screen, di bawah lockscreen */
+  transform: translateY(110%); /* Sembunyi di bawah */
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.app-screen.active {
+  transform: translateY(0); /* Muncul ke atas */
+}
+
+/* ========================================= */
+/* SISA CSS DI BAWAH INI SAMA SEPERTI SEBELUMNYA */
+/* ========================================= */
+
+.status-bar, .home-status {
   display: flex;
   justify-content: space-between;
   padding: 14px 24px 0;
@@ -53,7 +87,6 @@ body {
   opacity: 0.9;
 }
 
-/* Area jam */
 .clock-area {
   flex: 1;
   display: flex;
@@ -76,7 +109,6 @@ body {
   opacity: 0.85;
 }
 
-/* Tombol bawah */
 .bottom-buttons {
   display: flex;
   justify-content: space-between;
@@ -106,7 +138,6 @@ body {
   background: rgba(255, 59, 48, 0.75);
 }
 
-/* Ikon gambar di dalam tombol */
 .btn-icon {
   width: 14px;
   height: 14px;
@@ -115,7 +146,6 @@ body {
   filter: invert(1);
 }
 
-/* Petunjuk geser */
 .swipe-hint {
   text-align: center;
   font-size: 13px;
@@ -127,27 +157,6 @@ body {
 @keyframes pulse {
   0%, 100% { opacity: 0.4; }
   50% { opacity: 0.9; }
-}
-
-/* ===== HOME SCREEN ===== */
-.home-screen {
-  position: absolute;
-  inset: 12px;
-  border-radius: 30px;
-  background: linear-gradient(160deg, #2c5364, #203a43, #0f2027);
-  display: flex;
-  flex-direction: column;
-  color: #fff;
-  overflow: hidden;
-}
-
-.home-status {
-  display: flex;
-  justify-content: space-between;
-  padding: 14px 24px 0;
-  font-size: 13px;
-  font-weight: 600;
-  opacity: 0.9;
 }
 
 .app-grid {
@@ -201,25 +210,7 @@ body {
   opacity: 0.5;
 }
 
-/* ===== APLIKASI CHAT ===== */
-.app-screen {
-  position: absolute;
-  inset: 12px;
-  border-radius: 30px;
-  background: #f2f2f7;
-  display: flex;
-  flex-direction: column;
-  color: #000;
-  z-index: 3;
-  transform: translateY(100%);
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.app-screen.active {
-  transform: translateY(0);
-}
-
-/* Header Chat */
+/* Chat Styles */
 .chat-header {
   display: flex;
   align-items: center;
@@ -244,7 +235,6 @@ body {
   font-weight: 600;
 }
 
-/* Daftar Kontak */
 .chat-content {
   flex: 1;
   overflow-y: auto;
@@ -292,7 +282,6 @@ body {
   margin-top: 2px;
 }
 
-/* Ruang Obrolan */
 .chat-room {
   flex: 1;
   display: flex;
@@ -309,7 +298,6 @@ body {
   gap: 8px;
 }
 
-/* Bubble Pesan */
 .message {
   max-width: 75%;
   padding: 10px 14px;
@@ -332,7 +320,6 @@ body {
   border-bottom-right-radius: 4px;
 }
 
-/* Area Input */
 .chat-input-area {
   display: flex;
   padding: 10px;
