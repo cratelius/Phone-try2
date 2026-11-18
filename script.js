@@ -39,8 +39,9 @@ document.getElementById('emergency-btn').addEventListener('click', () => {
   }
 });
 
-// ===== Fungsi buka / kunci layar =====
+// ===== Fungsi Buka Layar (Tanpa Sandi) =====
 function unlockScreen() {
+  // Cukup hilangkan class 'unlocked' agar animasi geser ke atas berjalan
   lockscreen.classList.add('unlocked');
 }
 
@@ -48,7 +49,7 @@ function lockScreen() {
   lockscreen.classList.remove('unlocked');
 }
 
-// ===== Gesture geser ke atas (touch) =====
+// ===== Gesture Geser ke Atas (Layar Sentuh HP) =====
 let touchStartY = 0;
 lockscreen.addEventListener('touchstart', (e) => {
   touchStartY = e.touches[0].clientY;
@@ -56,10 +57,13 @@ lockscreen.addEventListener('touchstart', (e) => {
 
 lockscreen.addEventListener('touchend', (e) => {
   const touchEndY = e.changedTouches[0].clientY;
-  if (touchStartY - touchEndY > 80) unlockScreen();
+  // Jika digeser ke atas lebih dari 80px, langsung buka
+  if (touchStartY - touchEndY > 80) {
+    unlockScreen();
+  }
 });
 
-// ===== Gesture geser ke atas (mouse) =====
+// ===== Gesture Geser ke Atas (Mouse Komputer) =====
 let mouseStartY = 0;
 let isMouseDown = false;
 
@@ -71,10 +75,13 @@ lockscreen.addEventListener('mousedown', (e) => {
 lockscreen.addEventListener('mouseup', (e) => {
   if (!isMouseDown) return;
   isMouseDown = false;
-  if (mouseStartY - e.clientY > 80) unlockScreen();
+  // Jika digeser ke atas lebih dari 80px, langsung buka
+  if (mouseStartY - e.clientY > 80) {
+    unlockScreen();
+  }
 });
 
-// ===== Gesture geser ke bawah di home screen =====
+// ===== Gesture Geser ke Bawah di Home Screen (Kembali ke Kunci) =====
 let homeTouchStartY = 0;
 homeScreen.addEventListener('touchstart', (e) => {
   homeTouchStartY = e.touches[0].clientY;
@@ -82,7 +89,9 @@ homeScreen.addEventListener('touchstart', (e) => {
 
 homeScreen.addEventListener('touchend', (e) => {
   const homeTouchEndY = e.changedTouches[0].clientY;
-  if (homeTouchEndY - homeTouchStartY > 80) lockScreen();
+  if (homeTouchEndY - homeTouchStartY > 80) {
+    lockScreen();
+  }
 });
 
 let homeMouseStartY = 0;
@@ -96,7 +105,9 @@ homeScreen.addEventListener('mousedown', (e) => {
 homeScreen.addEventListener('mouseup', (e) => {
   if (!isHomeMouseDown) return;
   isHomeMouseDown = false;
-  if (e.clientY - homeMouseStartY > 80) lockScreen();
+  if (e.clientY - homeMouseStartY > 80) {
+    lockScreen();
+  }
 });
 
 // ===== Klik aplikasi di home screen =====
