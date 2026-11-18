@@ -1,4 +1,4 @@
-// ===== 1. JAM DAN TANGGAL =====
+// ===== 1. JAM DAN TANGGAL REAL-TIME =====
 function updateClock() {
   const now = new Date();
   const hours = String(now.getHours()).padStart(2, '0');
@@ -12,23 +12,19 @@ function updateClock() {
 updateClock();
 setInterval(updateClock, 1000);
 
-// ===== 2. BUKA & KUNCI LAYAR =====
+// ===== 2. BUKA & KUNCI LAYAR (GESTUR GESER) =====
 const lockscreen = document.getElementById('lockscreen');
 const homeScreen = document.getElementById('home-screen');
 
-function unlockScreen() { 
-  lockscreen.classList.add('unlocked'); 
-}
-function lockScreen() { 
-  lockscreen.classList.remove('unlocked'); 
-}
+function unlockScreen() { lockscreen.classList.add('unlocked'); }
+function lockScreen() { lockscreen.classList.remove('unlocked'); }
 
-// Fungsi untuk mendeteksi geseran (baik mouse maupun sentuhan)
+// Fungsi mendeteksi geseran (mendukung Mouse untuk PC & Touch untuk HP)
 function addSwipeListener(element, direction, callback) {
   let startY = 0;
   let isPointerDown = false;
 
-  // Untuk Sentuhan (HP)
+  // Layar Sentuh (HP)
   element.addEventListener('touchstart', (e) => {
     startY = e.touches[0].clientY;
   }, { passive: true });
@@ -41,7 +37,7 @@ function addSwipeListener(element, direction, callback) {
     if (direction === 'down' && distance < -60) callback();
   });
 
-  // Untuk Mouse (Komputer)
+  // Mouse (Komputer)
   element.addEventListener('mousedown', (e) => {
     startY = e.clientY;
     isPointerDown = true;
@@ -66,14 +62,17 @@ addSwipeListener(homeScreen, 'down', lockScreen);    // Geser ke bawah di home =
 document.querySelectorAll('.app').forEach(app => {
   app.addEventListener('click', () => {
     const appName = app.dataset.app;
+    
     if (appName === 'chat') {
       document.getElementById('chat-screen').classList.add('active');
     } else if (appName === 'kamera') {
       document.getElementById('camera-screen').classList.add('active');
-      generateMockImage();
+      startCamera();
     } else if (appName === 'galeri') {
       document.getElementById('gallery-screen').classList.add('active');
       renderGallery();
+    } else {
+      alert(`Aplikasi ${appName} belum tersedia.`);
     }
   });
 });
@@ -81,22 +80,29 @@ document.querySelectorAll('.app').forEach(app => {
 // Tombol Kamera di Lockscreen
 document.getElementById('camera-btn-lockscreen').addEventListener('click', () => {
   document.getElementById('camera-screen').classList.add('active');
-  generateMockImage();
+  startCamera();
 });
 
-// ===== 4. TOMBOL KEMBALI =====
+// ===== 4. TOMBOL KEMBALI (BACK) =====
 document.querySelectorAll('.back-btn[data-target]').forEach(btn => {
   btn.addEventListener('click', () => {
     const targetId = btn.dataset.target;
     document.getElementById(targetId).classList.remove('active');
+    
+    // Jika keluar dari Chat, reset tampilan ke daftar kontak
     if (targetId === 'chat-screen') {
       document.getElementById('chat-room-view').style.display = 'none';
       document.getElementById('chat-list-view').style.display = 'block';
     }
+    
+    // Jika keluar dari Kamera, matikan kamera (agar tidak boros baterai)
+    if (targetId === 'camera-screen') {
+      stopCamera();
+    }
   });
 });
 
-// ===== 5. LOGIKA CHAT =====
+// ===== 5. LOGIKA APLIKASI CHAT =====
 const chatListView = document.getElementById('chat-list-view');
 const chatRoomView = document.getElementById('chat-room-view');
 const chatMessages = document.getElementById('chat-messages');
@@ -104,63 +110,113 @@ const chatTitle = document.getElementById('chat-title');
 const chatInput = document.getElementById('chat-input');
 const sendBtn = document.getElementById('send-btn');
 
+// Pilih Kontak
 document.querySelectorAll('.chat-item').forEach(item => {
   item.addEventListener('click', () => {
     chatListView.style.display = 'none';
     chatRoomView.style.display = 'flex';
     chatTitle.textContent = `${item.dataset.avatar} ${item.dataset.contact}`;
     chatMessages.innerHTML = '';
+    
+    // Sapaan pertama dari kontak
     addMessage(`Halo, ini ${item.dataset.contact}. Ada apa?`, 'received');
   });
 });
 
+// Fungsi Menambah Gelembung Pesan
 function addMessage(text, type) {
   const msgDiv = document.createElement('div');
   msgDiv.classList.add('message', type);
   msgDiv.textContent = text;
   chatMessages.appendChild(msgDiv);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
+  chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll ke bawah
 }
 
+// Kirim Pesan & Balasan Otomatis
 sendBtn.addEventListener('click', () => {
   const text = chatInput.value.trim();
   if (!text) return;
+
   addMessage(text, 'sent');
   chatInput.value = '';
-  setTimeout(() => addMessage("Hah? Maksudnya gimana?", 'received'), 1000);
-});
-chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendBtn.click(); });
 
-// ===== 6. LOGIKA KAMERA =====
-const viewfinder = document.getElementById('camera-viewfinder');
+  // Simulasi bot membalas setelah 1 detik
+  setTimeout(() => {
+    let balasan = "Hah? Maksudnya gimana?";
+    const lowerText = text.toLowerCase();
+    
+    if (lowerText.includes('halo')) balasan = "Halo juga! Apa kabar?";
+    else if (lowerText.includes('dimana')) balasan = "Aku lagi di rumah nih.";
+    else if (lowerText.includes('ketemu')) balasan = "Boleh tuh, jam berapa?";
+    else if (lowerText.includes('kamera')) balasan = "Coba buka aplikasi kameranya deh.";
+    
+    addMessage(balasan, 'received');
+  }, 1000);
+});
+
+// Tekan Enter untuk Mengirim
+chatInput.addEventListener('keypress', (e) => { 
+  if (e.key === 'Enter') sendBtn.click(); 
+});
+
+// ===== 6. LOGIKA KAMERA ASLI (LIVE) =====
+const video = document.getElementById('camera-viewfinder');
 const shutterBtn = document.getElementById('shutter-btn');
 const flashOverlay = document.getElementById('flash-overlay');
+let stream = null; 
 
-const dummyColors = ['#ff9a9e', '#fecfef', '#a18cd1', '#fbc2eb', '#84fab0', '#8fd3f4', '#cfd9df'];
-let currentPhotoColor = '';
-
-function generateMockImage() {
-  currentPhotoColor = dummyColors[Math.floor(Math.random() * dummyColors.length)];
-  viewfinder.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="700"><rect width="100%" height="100%" fill="${currentPhotoColor}"/><text x="50%" y="50%" font-family="sans-serif" font-size="30" fill="white" text-anchor="middle">FOTO SIMULASI</text></svg>`;
+// Fungsi Menyalakan Kamera
+async function startCamera() {
+  try {
+    // Meminta akses kamera belakang (environment) atau depan (user)
+    stream = await navigator.mediaDevices.getUserMedia({ 
+      video: { facingMode: "environment" }, 
+      audio: false 
+    });
+    video.srcObject = stream;
+  } catch (err) {
+    console.error("Kamera gagal dinyalakan:", err);
+    alert("Kamera tidak bisa diakses.\n\nPastikan Anda:\n1. Memberi izin (Allow) pada browser.\n2. Membuka file melalui 'Live Server' (http://localhost), bukan klik dua kali file (file:///).");
+  }
 }
 
+// Fungsi Mematikan Kamera
+function stopCamera() {
+  if (stream) {
+    stream.getTracks().forEach(track => track.stop()); // Matikan jalur video
+    video.srcObject = null;
+  }
+}
+
+// Tombol Jepret (Shutter)
 shutterBtn.addEventListener('click', () => {
+  if (!stream) return; // Jangan lakukan apa-apa jika kamera belum nyala
+
+  // 1. Efek Flash
   flashOverlay.classList.add('active');
   setTimeout(() => flashOverlay.classList.remove('active'), 150);
 
-  const fotoUrl = viewfinder.src;
-  let savedPhotos = JSON.parse(localStorage.getItem('auPhotos')) || [];
-  savedPhotos.unshift(fotoUrl);
-  localStorage.setItem('auPhotos', JSON.stringify(savedPhotos));
+  // 2. Tangkap Gambar dari Video ke Canvas
+  const canvas = document.createElement('canvas');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-  setTimeout(() => generateMockImage(), 300);
+  // 3. Ubah ke format Gambar (Base64 JPEG)
+  const photoDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+
+  // 4. Simpan ke LocalStorage
+  let savedPhotos = JSON.parse(localStorage.getItem('auPhotos')) || [];
+  savedPhotos.unshift(photoDataUrl); // Tambahkan foto baru di paling depan
+  localStorage.setItem('auPhotos', JSON.stringify(savedPhotos));
 });
 
 // ===== 7. LOGIKA GALERI =====
 const galleryGrid = document.getElementById('gallery-grid');
 
 function renderGallery() {
-  galleryGrid.innerHTML = '';
+  galleryGrid.innerHTML = ''; // Bersihkan galeri
   let savedPhotos = JSON.parse(localStorage.getItem('auPhotos')) || [];
 
   if (savedPhotos.length === 0) {
@@ -168,10 +224,17 @@ function renderGallery() {
     return;
   }
 
-  savedPhotos.forEach(url => {
+  // Tampilkan semua foto
+  savedPhotos.forEach(photoUrl => {
     const img = document.createElement('img');
-    img.src = url;
-    img.addEventListener('click', () => alert('Foto dibuka!'));
+    img.src = photoUrl;
+    
+    // Fitur Zoom: Jika foto diklik, buka di tab baru ukuran penuh
+    img.addEventListener('click', () => {
+      const win = window.open();
+      win.document.write(`<img src="${photoUrl}" style="max-width:100%; max-height:100vh; display:block; margin:auto;">`);
+    });
+    
     galleryGrid.appendChild(img);
   });
 }
