@@ -35,6 +35,12 @@ body {
   display: flex;
   flex-direction: column;
   color: #fff;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 2;
+}
+
+.lockscreen.unlocked {
+  transform: translateY(-100%);
 }
 
 /* Status bar */
@@ -78,8 +84,8 @@ body {
 }
 
 .round-btn {
-  width: 48px;          /* diperkecil dari 56px */
-  height: 48px;         /* diperkecil dari 56px */
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   border: none;
   background: rgba(255, 255, 255, 0.18);
@@ -102,10 +108,11 @@ body {
 
 /* Ikon gambar di dalam tombol */
 .btn-icon {
-  width: 18px;          /* diperkecil dari 26px */
-  height: 18px;         /* diperkecil dari 26px */
+  width: 20px;        /* Ukuran pas, tidak kegedean */
+  height: 20px;
   object-fit: contain;
   pointer-events: none;
+  filter: invert(1);  /* Mengubah ikon hitam menjadi putih */
 }
 
 /* Petunjuk geser */
@@ -120,4 +127,76 @@ body {
 @keyframes pulse {
   0%, 100% { opacity: 0.4; }
   50% { opacity: 0.9; }
+}
+
+/* ===== HOME SCREEN ===== */
+.home-screen {
+  position: absolute;
+  inset: 12px;
+  border-radius: 30px;
+  background: linear-gradient(160deg, #2c5364, #203a43, #0f2027);
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+  overflow: hidden;
+}
+
+.home-status {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 24px 0;
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.app-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px 16px;
+  padding: 48px 28px;
+  align-content: start;
+}
+
+.app {
+  background: transparent;
+  border: none;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.app-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28px;
+  transition: transform 0.15s, background 0.2s;
+}
+
+.app:active .app-icon {
+  transform: scale(0.92);
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.app-name {
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.home-hint {
+  text-align: center;
+  font-size: 12px;
+  padding-bottom: 18px;
+  opacity: 0.5;
 }
