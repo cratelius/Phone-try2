@@ -72,6 +72,56 @@
       <div class="swipe-hint">Geser ke atas untuk membuka</div>
     </div>
 
+    <!-- ===== APLIKASI CHAT ===== -->
+    <div class="app-screen" id="chat-screen">
+      <!-- Header Chat -->
+      <div class="chat-header">
+        <button id="back-to-home" class="back-btn">←</button>
+        <h2 id="chat-title">Pesan</h2>
+      </div>
+
+      <!-- Konten Chat -->
+      <div class="chat-content">
+        
+        <!-- Tampilan Daftar Kontak -->
+        <div id="chat-list-view" class="chat-list">
+          <div class="chat-item" data-contact="Rian" data-avatar="👦">
+            <div class="avatar">👦</div>
+            <div class="chat-info">
+              <div class="chat-name">Rian</div>
+              <div class="chat-preview">Halo, kamu di mana?</div>
+            </div>
+          </div>
+          <div class="chat-item" data-contact="Dita" data-avatar="👧">
+            <div class="avatar">👧</div>
+            <div class="chat-info">
+              <div class="chat-name">Dita</div>
+              <div class="chat-preview">Jangan lupa bawa buku ya!</div>
+            </div>
+          </div>
+          <div class="chat-item" data-contact="Budi" data-avatar="🧑">
+            <div class="avatar">🧑</div>
+            <div class="chat-info">
+              <div class="chat-name">Budi</div>
+              <div class="chat-preview">Nanti kita ketemuan jam 5.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tampilan Ruang Obrolan (Awalnya disembunyikan) -->
+        <div id="chat-room-view" class="chat-room" style="display: none;">
+          <div id="chat-messages" class="chat-messages">
+            <!-- Pesan akan muncul di sini -->
+          </div>
+          <div class="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Ketik pesan...">
+            <button id="send-btn">Kirim</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 
   <script src="script.js"></script>
