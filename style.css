@@ -22,22 +22,27 @@ body {
   padding: 12px;
   box-shadow: 0 0 60px rgba(0, 0, 0, 0.8), inset 0 0 4px #444;
   position: relative;
-  overflow: hidden; /* Menahan semua elemen bocor ke luar */
+  overflow: hidden; /* Mencegah kebocoran */
 }
 
-/* ===== LAYAR LOCKSCREEN ===== */
-.lockscreen {
+/* ===== BASE SCREEN (Semua layar pakai ini) ===== */
+.screen {
   position: absolute;
   top: 12px;
   left: 12px;
-  right: 12px;
-  bottom: 12px;
+  width: 336px; /* 360px - (12px * 2) */
+  height: 696px; /* 720px - (12px * 2) */
   border-radius: 30px;
-  background: linear-gradient(160deg, #0f2027, #203a43, #2c5364);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+}
+
+/* ===== LOCKSCREEN ===== */
+.lockscreen {
+  background: linear-gradient(160deg, #0f2027, #203a43, #2c5364);
   color: #fff;
-  z-index: 3; /* Paling atas */
+  z-index: 3;
   transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -47,33 +52,17 @@ body {
 
 /* ===== HOME SCREEN ===== */
 .home-screen {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  right: 12px;
-  bottom: 12px;
-  border-radius: 30px;
   background: linear-gradient(160deg, #2c5364, #203a43, #0f2027);
-  display: flex;
-  flex-direction: column;
   color: #fff;
-  z-index: 1; /* Paling bawah */
+  z-index: 1;
 }
 
 /* ===== APLIKASI CHAT ===== */
 .app-screen {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  right: 12px;
-  bottom: 12px;
-  border-radius: 30px;
   background: #f2f2f7;
-  display: flex;
-  flex-direction: column;
   color: #000;
-  z-index: 2; /* Di atas home, di bawah lockscreen */
-  transform: translateY(110%); /* Sembunyi di bawah */
+  z-index: 2;
+  transform: translateY(110%);
   transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -172,7 +161,7 @@ body {
   gap: 28px 16px;
   padding: 48px 28px;
   align-content: start;
-  overflow-y: auto; /* Biar bisa discroll kalau layar kecil */
+  overflow-y: auto;
 }
 
 .app {
@@ -224,7 +213,6 @@ body {
   padding: 16px;
   background: #fff;
   border-bottom: 1px solid #ddd;
-  border-radius: 30px 30px 0 0;
 }
 
 .back-btn {
@@ -244,9 +232,14 @@ body {
 
 .chat-content {
   flex: 1;
-  overflow-y: auto; /* Scroll hanya di dalam konten chat */
   display: flex;
   flex-direction: column;
+  overflow: hidden; /* Penting */
+}
+
+.chat-list {
+  flex: 1;
+  overflow-y: auto;
 }
 
 .chat-item {
@@ -294,7 +287,7 @@ body {
   display: flex;
   flex-direction: column;
   background: #e5e5ea;
-  overflow: hidden; /* Penting agar input tidak bocor */
+  overflow: hidden; /* Penting */
 }
 
 .chat-messages {
