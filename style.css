@@ -72,7 +72,7 @@ body {
   color: #fff;
 }
 
-/* Grid Aplikasi */
+/* Grid Aplikasi Utama */
 .app-grid {
   flex: 1;
   display: grid;
@@ -150,7 +150,7 @@ body {
 .bg-game { background: #FF9500; }
 .bg-galeri { background: #fff; }
 
-/* Indikator Halaman */
+/* Indikator Halaman (Titik-titik) */
 .page-dots {
   display: flex;
   justify-content: center;
@@ -175,15 +175,23 @@ body {
   backdrop-filter: blur(20px);
   border-radius: 30px;
   display: flex;
+  flex-direction: row;
   justify-content: space-around;
   align-items: center;
 }
 
 .dock .app {
-  width: auto;
+  width: 60px; 
+  flex-shrink: 0;
 }
+
 .dock .app-icon {
   box-shadow: none;
+  margin: 0 auto;
+}
+
+.dock .app-name {
+  display: none; 
 }
 
 .bg-camera { background: #ccc; color: #555; }
@@ -270,3 +278,41 @@ body {
 .action-bar { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; background: #fff; border-top: 1px solid #ddd; z-index: 100; position: relative; }
 .action-bar button { background: none; border: none; font-size: 16px; cursor: pointer; color: #007aff; }
 .empty-gallery { grid-column: 1 / -1; text-align: center; padding: 40px; color: #888; }
+
+/* ===== APLIKASI BLOCK BLAST ===== */
+#blockblast-screen {
+  background: #1a1a2e; /* Latar gelap khas game */
+}
+
+.bb-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+#game-board {
+  background: #0f2027;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  touch-action: none; /* Mencegah scroll saat menyentuh papan game */
+}
+
+.bb-blocks-area {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin-top: 30px;
+  height: 90px;
+}
+
+.bb-block {
+  touch-action: none;
+  cursor: grab;
+}
+
+.bb-block:active {
+  cursor: grabbing;
+}
