@@ -190,15 +190,21 @@
       </div>
     </div>
 
-    <!-- ===== LAYAR PANGGILAN MASUK (BARU) ===== -->
-    <div class="screen app-screen" id="incoming-call-screen" style="z-index: 100; background: linear-gradient(180deg, #1c1c1e 0%, #000 100%); color: white; justify-content: space-between; padding: 50px 20px;">
+    <!-- ===== LAYAR PANGGILAN MASUK ===== -->
+    <div class="screen" id="incoming-call-screen" style="z-index: 999; background: linear-gradient(180deg, #1c1c1e 0%, #000 100%); color: white; display: none; flex-direction: column; justify-content: space-between; padding: 50px 20px;">
       <div style="text-align: center; margin-top: 30px;">
         <p style="font-size: 20px; opacity: 0.8; margin-bottom: 10px;">Panggilan Masuk...</p>
-        <h1 style="font-size: 36px; font-weight: 500;">Erine</h1>
+        <!-- Nama Erine (Animasi getar dihapus) -->
+        <h1 id="caller-name" style="font-size: 36px; font-weight: 500;">Erine</h1>
       </div>
       <div style="display: flex; justify-content: space-around; margin-bottom: 50px;">
+        <!-- Tombol Tolak -->
         <button id="decline-call-btn" style="width: 70px; height: 70px; border-radius: 50%; border: none; background: #ff3b30; color: white; font-size: 24px; cursor: pointer; display: flex; justify-content: center; align-items: center;">✕</button>
-        <button id="accept-call-btn" style="width: 70px; height: 70px; border-radius: 50%; border: none; background: #34C759; color: white; font-size: 24px; cursor: pointer; display: flex; justify-content: center; align-items: center;">📞</button>
+        
+        <!-- Tombol Angkat (Menggunakan telepon.jpg) -->
+        <button id="accept-call-btn" style="width: 70px; height: 70px; border-radius: 50%; border: none; background: #34C759; cursor: pointer; display: flex; justify-content: center; align-items: center; overflow: hidden;">
+          <img src="telepon.jpg" alt="Angkat" style="width: 100%; height: 100%; object-fit: cover;">
+        </button>
       </div>
     </div>
 
