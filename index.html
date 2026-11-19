@@ -92,9 +92,11 @@
       </div>
 
       <div class="bottom-buttons">
+        <!-- Ikon Telepon Darurat di Lockscreen -->
         <button id="emergency-btn" class="round-btn emergency" aria-label="Telepon Darurat">
           <img src="telepon.png" alt="" class="btn-icon" onerror="this.outerHTML='📞'">
         </button>
+        <!-- Ikon Kamera di Lockscreen (Menggunakan .png) -->
         <button id="camera-btn-lockscreen" class="round-btn" aria-label="Kamera">
           <img src="kamera.png" alt="" class="btn-icon" onerror="this.outerHTML='📷'">
         </button>
@@ -194,14 +196,10 @@
     <div class="screen" id="incoming-call-screen" style="z-index: 999; background: linear-gradient(180deg, #1c1c1e 0%, #000 100%); color: white; display: none; flex-direction: column; justify-content: space-between; padding: 50px 20px;">
       <div style="text-align: center; margin-top: 30px;">
         <p style="font-size: 20px; opacity: 0.8; margin-bottom: 10px;">Panggilan Masuk...</p>
-        <!-- Nama Erine (Animasi getar dihapus) -->
         <h1 id="caller-name" style="font-size: 36px; font-weight: 500;">Erine</h1>
       </div>
       <div style="display: flex; justify-content: space-around; margin-bottom: 50px;">
-        <!-- Tombol Tolak -->
         <button id="decline-call-btn" style="width: 70px; height: 70px; border-radius: 50%; border: none; background: #ff3b30; color: white; font-size: 24px; cursor: pointer; display: flex; justify-content: center; align-items: center;">✕</button>
-        
-        <!-- Tombol Angkat (Menggunakan telepon.jpg yang dikecilkan di tengah) -->
         <button id="accept-call-btn" style="width: 70px; height: 70px; border-radius: 50%; border: none; background: #34C759; cursor: pointer; display: flex; justify-content: center; align-items: center;">
           <img src="telepon.jpg" alt="Angkat" style="width: 40px; height: 40px; object-fit: contain; border-radius: 50%;">
         </button>
