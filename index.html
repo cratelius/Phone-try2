@@ -15,7 +15,7 @@
         <span class="ios-time" id="ios-time">08:55</span>
         <div class="status-right">
           <img src="wifi.jpg" alt="Wifi" class="status-icon-img">
-          <span>🔋</span> <!-- Ikon baterai dikembalikan -->
+          <span>🔋</span>
         </div>
       </div>
 
@@ -35,7 +35,7 @@
         <div class="app" data-app="tiktok">
           <div class="app-icon"><img src="tiktok.jpg" alt=""></div>
           <span class="app-name">TikTok</span>
-          <div class="badge">2</div> <!-- Notifikasi TikTok jadi 2 -->
+          <div class="badge">2</div>
         </div>
         <div class="app" data-app="zoom">
           <div class="app-icon"><img src="zoom.jpg" alt=""></div>
@@ -69,7 +69,7 @@
         </div>
         <div class="app" data-app="whatsapp">
           <div class="app-icon"><img src="whatsapp.jpg" alt=""></div>
-          <div class="badge">1</div> <!-- Notifikasi WhatsApp jadi 1 -->
+          <div class="badge">1</div>
         </div>
       </div>
 
@@ -141,9 +141,7 @@
       <div class="camera-view">
         <video id="camera-viewfinder" autoplay playsinline muted></video>
         <div id="flash-overlay" class="flash-effect"></div>
-        
         <button class="camera-close-btn" onclick="tutupKamera()">✕</button>
-
         <div class="camera-controls">
           <button id="shutter-btn" class="shutter-btn"></button>
         </div>
@@ -157,9 +155,7 @@
         <h2>Galeri</h2>
         <button id="menu-gallery-btn" style="margin-left: auto; background: none; border: none; font-size: 24px; color: #007aff; cursor: pointer; font-weight: bold; padding: 0 10px;">⋮</button>
       </div>
-
       <div class="gallery-content" id="gallery-grid"></div>
-
       <div id="gallery-action-bar" class="action-bar" style="display: none;">
         <button id="cancel-select-btn">Batal</button>
         <span id="selected-count" style="font-weight: bold; color: #333;">0 dipilih</span>
@@ -183,7 +179,6 @@
         <h2 style="color: white; font-weight: bold;">Block Blast</h2>
         <span id="bb-score" style="margin-left: auto; font-size: 18px; font-weight: bold; padding-right: 10px;">0</span>
       </div>
-
       <div class="bb-container">
         <canvas id="game-board" width="320" height="320"></canvas>
         <div class="bb-blocks-area">
@@ -192,6 +187,18 @@
           <canvas id="block-3" class="bb-block" width="80" height="80"></canvas>
         </div>
         <button id="restart-bb" style="margin-top: 20px; padding: 10px 20px; border-radius: 20px; border: none; background: #ff3b30; color: white; font-weight: bold; cursor: pointer;">Ulangi Game</button>
+      </div>
+    </div>
+
+    <!-- ===== LAYAR PANGGILAN MASUK (BARU) ===== -->
+    <div class="screen app-screen" id="incoming-call-screen" style="z-index: 100; background: linear-gradient(180deg, #1c1c1e 0%, #000 100%); color: white; justify-content: space-between; padding: 50px 20px;">
+      <div style="text-align: center; margin-top: 30px;">
+        <p style="font-size: 20px; opacity: 0.8; margin-bottom: 10px;">Panggilan Masuk...</p>
+        <h1 style="font-size: 36px; font-weight: 500;">Erine</h1>
+      </div>
+      <div style="display: flex; justify-content: space-around; margin-bottom: 50px;">
+        <button id="decline-call-btn" style="width: 70px; height: 70px; border-radius: 50%; border: none; background: #ff3b30; color: white; font-size: 24px; cursor: pointer; display: flex; justify-content: center; align-items: center;">✕</button>
+        <button id="accept-call-btn" style="width: 70px; height: 70px; border-radius: 50%; border: none; background: #34C759; color: white; font-size: 24px; cursor: pointer; display: flex; justify-content: center; align-items: center;">📞</button>
       </div>
     </div>
 
