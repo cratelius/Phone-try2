@@ -1,3 +1,9 @@
+// ===== FUNGSI GLOBAL UNTUK TUTUP KAMERA =====
+function tutupKamera() {
+  document.getElementById('camera-screen').classList.remove('active');
+  stopCamera();
+}
+
 // ===== 1. JAM DAN TANGGAL REAL-TIME =====
 function updateClock() {
   const now = new Date();
@@ -6,7 +12,6 @@ function updateClock() {
   const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
   document.getElementById('date').textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
 
-  // Jam status bar home screen ikut real-time
   const iosTime = document.getElementById('ios-time');
   if (iosTime) iosTime.textContent = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 }
@@ -59,19 +64,15 @@ document.querySelectorAll('.app').forEach(app => {
   });
 });
 
-// FIX #1: tombol kamera lockscreen — tutup lockscreen dulu, lalu buka kamera
 document.getElementById('camera-btn-lockscreen').addEventListener('click', () => {
   lockscreen.classList.add('unlocked');
   document.getElementById('camera-screen').classList.add('active');
   startCamera();
 });
 
-// FIX #7: listener tombol telepon darurat
 document.getElementById('emergency-btn').addEventListener('click', () => {
-  const nomor = prompt(
-    '🚨 TELEPON DARURAT\n\n• 112 — Darurat umum\n• 110 — Polisi\n• 113 — Pemadam Kebakaran\n• 118 — Ambulans\n\nKetik nomor:'
-  );
-  if (nomor) alert(`📞 Memanggil ${nomor}...\n\n(Ini simulasi. Di ponsel asli, panggilan akan tersambung.)`);
+  const nomor = prompt('🚨 TELEPON DARURAT\n\n• 112 — Darurat umum\n• 110 — Polisi\n• 113 — Pemadam Kebakaran\n• 118 — Ambulans\n\nKetik nomor:');
+  if (nomor) alert(`📞 Memanggil ${nomor}...\n\n(Ini simulasi.)`);
 });
 
 // ===== 4. TOMBOL BACK (KEMBALI) =====
@@ -90,7 +91,6 @@ document.querySelectorAll('.back-btn[data-target]').forEach(btn => {
       document.getElementById('chat-room-view').style.display = 'none';
       document.getElementById('chat-list-view').style.display = 'block';
     }
-    if (targetId === 'camera-screen') stopCamera();
   });
 });
 
@@ -136,7 +136,7 @@ const flashOverlay = document.getElementById('flash-overlay');
 let stream = null;
 
 async function startCamera() {
-  if (stream) return; // FIX #2: jangan buka stream baru jika sudah ada
+  if (stream) return;
   try {
     stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false });
     video.srcObject = stream;
@@ -148,7 +148,7 @@ function stopCamera() {
   if (stream) {
     stream.getTracks().forEach(track => track.stop());
     video.srcObject = null;
-    stream = null; // FIX #3: reset stream agar bisa dibuka lagi
+    stream = null;
   }
 }
 shutterBtn.addEventListener('click', () => {
@@ -180,11 +180,7 @@ const deletePreviewBtn = document.getElementById('delete-preview-btn');
 let isSelectMode = false;
 let currentPreviewSrc = '';
 
-const defaultPhotos = [
-  "foto1.jpg", "foto2.jpg", "foto3.jpg", "foto4.jpg",
-  "foto5.jpg", "foto6.jpg", "foto7.jpg", "foto8.jpg",
-  "foto9.jpg", "foto10.jpg", "foto11.jpg", "foto12.jpg"
-];
+const defaultPhotos = ["foto1.jpg","foto2.jpg","foto3.jpg","foto4.jpg","foto5.jpg","foto6.jpg","foto7.jpg","foto8.jpg","foto9.jpg","foto10.jpg","foto11.jpg","foto12.jpg"];
 
 function getAllPhotos() {
   let userPhotos = JSON.parse(localStorage.getItem('auPhotos')) || [];
@@ -210,11 +206,7 @@ function renderGallery() {
 
     const img = document.createElement('img');
     img.src = photoUrl;
-
-    // FIX #5: jika foto bawaan tidak ada, sembunyikan itemnya
-    img.onerror = () => {
-      if (defaultPhotos.includes(photoUrl)) itemDiv.style.display = 'none';
-    };
+    img.onerror = () => { if (defaultPhotos.includes(photoUrl)) itemDiv.style.display = 'none'; };
 
     const checkCircle = document.createElement('div');
     checkCircle.className = 'check-circle';
@@ -291,7 +283,6 @@ function deletePhotoFromStorage(photoUrl) {
 deleteSelectedBtn.addEventListener('click', () => {
   const selected = document.querySelectorAll('.gallery-item.selected');
   if (selected.length === 0) return alert("Pilih minimal satu foto terlebih dahulu.");
-
   if (confirm(`Hapus ${selected.length} foto ini?`)) {
     let urlsToDelete = [];
     selected.forEach(item => urlsToDelete.push(item.dataset.src));
@@ -304,11 +295,7 @@ deleteSelectedBtn.addEventListener('click', () => {
 // ===== 8. LOGIKA GAME BLOCK BLAST =====
 const boardCanvas = document.getElementById('game-board');
 const ctx = boardCanvas.getContext('2d');
-const blockCanvases = [
-  document.getElementById('block-1'),
-  document.getElementById('block-2'),
-  document.getElementById('block-3')
-];
+const blockCanvases = [document.getElementById('block-1'), document.getElementById('block-2'), document.getElementById('block-3')];
 const scoreDisplay = document.getElementById('bb-score');
 const restartBtn = document.getElementById('restart-bb');
 
@@ -383,8 +370,7 @@ function roundRect(ctx, x, y, width, height, radius) {
 }
 
 let draggedBlockIndex = -1;
-let dragX = 0;
-let dragY = 0;
+let dragX = 0, dragY = 0;
 
 blockCanvases.forEach((canvas, index) => {
   canvas.addEventListener('pointerdown', (e) => {
@@ -392,17 +378,14 @@ blockCanvases.forEach((canvas, index) => {
     draggedBlockIndex = index;
     canvas.setPointerCapture(e.pointerId);
     const rect = boardCanvas.getBoundingClientRect();
-    dragX = e.clientX - rect.left;
-    dragY = e.clientY - rect.top;
+    dragX = e.clientX - rect.left; dragY = e.clientY - rect.top;
   });
 
   canvas.addEventListener('pointermove', (e) => {
     if (draggedBlockIndex !== index) return;
     const rect = boardCanvas.getBoundingClientRect();
-    dragX = e.clientX - rect.left;
-    dragY = e.clientY - rect.top;
-    drawBoard();
-    drawDraggedBlock();
+    dragX = e.clientX - rect.left; dragY = e.clientY - rect.top;
+    drawBoard(); drawDraggedBlock();
   });
 
   canvas.addEventListener('pointerup', (e) => {
@@ -414,10 +397,7 @@ blockCanvases.forEach((canvas, index) => {
       placeBlock(availableBlocks[index].shape, row, col, availableBlocks[index].color);
       availableBlocks[index] = null;
       drawMiniBlock(blockCanvases[index], null);
-
-      if (availableBlocks.every(b => b === null)) {
-        generateBlock(0); generateBlock(1); generateBlock(2);
-      }
+      if (availableBlocks.every(b => b === null)) { generateBlock(0); generateBlock(1); generateBlock(2); }
       checkAndClearLines();
     }
     draggedBlockIndex = -1;
@@ -431,7 +411,6 @@ function drawDraggedBlock() {
   const shape = block.shape;
   const col = Math.floor(dragX / CELL_SIZE);
   const row = Math.floor(dragY / CELL_SIZE);
-
   for (let r = 0; r < shape.length; r++) {
     for (let c = 0; c < shape[r].length; c++) {
       if (shape[r][c] === 1) {
@@ -462,32 +441,20 @@ function canPlaceBlock(shape, row, col) {
 function placeBlock(shape, row, col, color) {
   for (let r = 0; r < shape.length; r++) {
     for (let c = 0; c < shape[r].length; c++) {
-      if (shape[r][c] === 1) {
-        board[row + r][col + c] = color;
-      }
+      if (shape[r][c] === 1) board[row + r][col + c] = color;
     }
   }
 }
 
 function checkAndClearLines() {
   let linesCleared = 0;
-  let rowsToClear = [];
-  let colsToClear = [];
-
-  for (let r = 0; r < GRID_SIZE; r++) {
-    if (board[r].every(cell => cell !== 0)) {
-      rowsToClear.push(r); linesCleared++;
-    }
-  }
-
+  let rowsToClear = [], colsToClear = [];
+  for (let r = 0; r < GRID_SIZE; r++) { if (board[r].every(cell => cell !== 0)) { rowsToClear.push(r); linesCleared++; } }
   for (let c = 0; c < GRID_SIZE; c++) {
     let isFull = true;
-    for (let r = 0; r < GRID_SIZE; r++) {
-      if (board[r][c] === 0) { isFull = false; break; }
-    }
+    for (let r = 0; r < GRID_SIZE; r++) { if (board[r][c] === 0) { isFull = false; break; } }
     if (isFull) { colsToClear.push(c); linesCleared++; }
   }
-
   rowsToClear.forEach(r => { for (let c = 0; c < GRID_SIZE; c++) board[r][c] = 0; });
   colsToClear.forEach(c => { for (let r = 0; r < GRID_SIZE; r++) board[r][c] = 0; });
 
