@@ -281,7 +281,7 @@ body {
 
 /* ===== APLIKASI BLOCK BLAST ===== */
 #blockblast-screen {
-  background: #1a1a2e; /* Latar gelap khas game */
+  background: #1a1a2e;
 }
 
 .bb-container {
@@ -297,7 +297,7 @@ body {
   background: #0f2027;
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(0,0,0,0.5);
-  touch-action: none; /* Mencegah scroll saat menyentuh papan game */
+  touch-action: none;
 }
 
 .bb-blocks-area {
@@ -323,7 +323,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 20; /* Pastikan di atas segalanya */
+  z-index: 20; /* Pastikan berada di atas aplikasi lain */
 }
 
 #full-photo {
