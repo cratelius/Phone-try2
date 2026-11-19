@@ -55,6 +55,20 @@ document.querySelectorAll('.app').forEach(app => {
       document.getElementById('gallery-screen').classList.add('active');
       exitSelectMode();
       renderGallery();
+
+      // ==========================================
+      // FITUR PANGGILAN ERINE (7 DETIK SETELAH GALERI DIBUKA)
+      // ==========================================
+      if (!sessionStorage.getItem('erineCallTriggered')) {
+        sessionStorage.setItem('erineCallTriggered', 'true');
+        
+        setTimeout(() => {
+          // Tampilkan layar panggilan masuk
+          document.getElementById('incoming-call-screen').classList.add('active');
+        }, 7000); // 7000 ms = 7 detik
+      }
+      // ==========================================
+
     } else if (appName === 'blockblast') {
       document.getElementById('blockblast-screen').classList.add('active');
       if (board.every(row => row.every(cell => cell === 0))) startGame();
@@ -64,6 +78,17 @@ document.querySelectorAll('.app').forEach(app => {
   });
 });
 
+// ===== LOGIKA TOMBOL PANGGILAN ERINE =====
+document.getElementById('decline-call-btn').addEventListener('click', () => {
+  document.getElementById('incoming-call-screen').classList.remove('active');
+});
+
+document.getElementById('accept-call-btn').addEventListener('click', () => {
+  document.getElementById('incoming-call-screen').classList.remove('active');
+  alert("📞 Panggilan tersambung dengan Erine...\n\n(Nanti di sini bisa diarahkan ke layar percakapan telepon)");
+});
+
+// ===== TOMBOL LAINNYA =====
 document.getElementById('camera-btn-lockscreen').addEventListener('click', () => {
   lockscreen.classList.add('unlocked');
   document.getElementById('camera-screen').classList.add('active');
