@@ -178,6 +178,29 @@
       </div>
     </div>
 
+    <!-- ===== APLIKASI BLOCK BLAST ===== -->
+    <div class="screen app-screen" id="blockblast-screen">
+      <div class="chat-header" style="background: #1a1a2e; border-bottom: none; color: white;">
+        <button class="back-btn" data-target="blockblast-screen" style="color: white;">←</button>
+        <h2 style="color: white; font-weight: bold;">Block Blast</h2>
+        <span id="bb-score" style="margin-left: auto; font-size: 18px; font-weight: bold; padding-right: 10px;">0</span>
+      </div>
+      
+      <div class="bb-container">
+        <!-- Papan Permainan -->
+        <canvas id="game-board" width="320" height="320"></canvas>
+        
+        <!-- Tempat Balok Menunggu -->
+        <div class="bb-blocks-area">
+          <canvas id="block-1" class="bb-block" width="80" height="80"></canvas>
+          <canvas id="block-2" class="bb-block" width="80" height="80"></canvas>
+          <canvas id="block-3" class="bb-block" width="80" height="80"></canvas>
+        </div>
+        
+        <button id="restart-bb" style="margin-top: 20px; padding: 10px 20px; border-radius: 20px; border: none; background: #ff3b30; color: white; font-weight: bold; cursor: pointer;">Ulangi Game</button>
+      </div>
+    </div>
+
   </div>
 
   <script src="script.js"></script>
