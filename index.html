@@ -11,36 +11,78 @@
 
     <!-- ===== HOME SCREEN ===== -->
     <div class="screen home-screen" id="home-screen">
-      <div class="home-status">
-        <span>Telkomsel</span>
-        <span>📶 🔋 87%</span>
+      <!-- Status Bar iOS -->
+      <div class="ios-status-bar">
+        <span class="ios-time" id="ios-time">08:55</span>
+        <span class="ios-icons">📶 🔋</span>
       </div>
 
+      <!-- Grid Aplikasi Utama -->
       <div class="app-grid">
-        <button class="app" data-app="chat">
-          <span class="app-icon">💬</span>
-          <span class="app-name">Chat</span>
-        </button>
-        <button class="app" data-app="galeri">
-          <span class="app-icon">🖼️</span>
-          <span class="app-name">Galeri</span>
-        </button>
-        <button class="app" data-app="catatan">
-          <span class="app-icon">📝</span>
+        <!-- Spotify -->
+        <div class="app" data-app="spotify">
+          <div class="app-icon bg-spotify">🎵</div>
+          <span class="app-name">Spotify</span>
+        </div>
+        <!-- Instagram -->
+        <div class="app" data-app="instagram">
+          <div class="app-icon bg-instagram">📷</div>
+          <span class="app-name">Instagram</span>
+        </div>
+        <!-- YouTube -->
+        <div class="app" data-app="youtube">
+          <div class="app-icon bg-youtube">▶️</div>
+          <span class="app-name">YouTube</span>
+        </div>
+        <!-- TikTok -->
+        <div class="app" data-app="tiktok">
+          <div class="app-icon bg-tiktok">🎵</div>
+          <span class="app-name">TikTok</span>
+          <div class="badge">246</div>
+        </div>
+        <!-- Zoom -->
+        <div class="app" data-app="zoom">
+          <div class="app-icon bg-zoom">📹</div>
+          <span class="app-name">Zoom</span>
+        </div>
+        <!-- Catatan -->
+        <div class="app" data-app="catatan">
+          <div class="app-icon bg-notes">📝</div>
           <span class="app-name">Catatan</span>
-        </button>
-        <button class="app" data-app="telepon">
-          <span class="app-icon">📞</span>
-          <span class="app-name">Telepon</span>
-        </button>
-        <button class="app" data-app="kamera">
-          <span class="app-icon">📷</span>
-          <span class="app-name">Kamera</span>
-        </button>
-        <button class="app" data-app="pengaturan">
-          <span class="app-icon">⚙️</span>
-          <span class="app-name">Pengaturan</span>
-        </button>
+        </div>
+        <!-- Block Blast -->
+        <div class="app" data-app="blockblast">
+          <div class="app-icon bg-game">🧩</div>
+          <span class="app-name">Block Blast</span>
+        </div>
+        <!-- Galeri -->
+        <div class="app" data-app="galeri">
+          <div class="app-icon bg-galeri">🌻</div>
+          <span class="app-name">Photos</span>
+        </div>
+      </div>
+
+      <!-- Indikator Halaman -->
+      <div class="page-dots">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+      </div>
+
+      <!-- Dock (Bar Bawah) -->
+      <div class="dock">
+        <!-- Kamera -->
+        <div class="app" data-app="kamera">
+          <div class="app-icon bg-camera">📷</div>
+        </div>
+        <!-- Telepon -->
+        <div class="app" data-app="telepon">
+          <div class="app-icon bg-phone">📞</div>
+        </div>
+        <!-- WhatsApp -->
+        <div class="app" data-app="whatsapp">
+          <div class="app-icon bg-whatsapp">💬</div>
+          <div class="badge">59</div>
+        </div>
       </div>
 
       <div class="home-hint">Geser ke bawah untuk kembali ke lockscreen</div>
@@ -117,12 +159,11 @@
       </div>
     </div>
 
-    <!-- ===== APLIKASI GALERI (DENGAN MENU TITIK TIGA) ===== -->
+    <!-- ===== APLIKASI GALERI ===== -->
     <div class="screen app-screen" id="gallery-screen">
       <div class="chat-header">
         <button class="back-btn" data-target="gallery-screen">←</button>
         <h2>Galeri</h2>
-        <!-- Tombol Titik Tiga (Menu) -->
         <button id="menu-gallery-btn" style="margin-left: auto; background: none; border: none; font-size: 24px; color: #007aff; cursor: pointer; font-weight: bold; padding: 0 10px;">⋮</button>
       </div>
       
@@ -130,7 +171,6 @@
         <!-- Foto akan muncul di sini -->
       </div>
 
-      <!-- Action Bar (Muncul saat mode Pilih aktif) -->
       <div id="gallery-action-bar" class="action-bar" style="display: none;">
         <button id="cancel-select-btn">Batal</button>
         <span id="selected-count" style="font-weight: bold; color: #333;">0 dipilih</span>
