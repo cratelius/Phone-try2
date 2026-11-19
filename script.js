@@ -6,7 +6,7 @@ function updateClock() {
   const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
   document.getElementById('date').textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
 
-  // FIX: jam di status bar home screen juga ikut real-time
+  // Jam status bar home screen ikut real-time
   const iosTime = document.getElementById('ios-time');
   if (iosTime) iosTime.textContent = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 }
@@ -66,7 +66,7 @@ document.getElementById('camera-btn-lockscreen').addEventListener('click', () =>
   startCamera();
 });
 
-// FIX #7: listener tombol telepon darurat (sebelumnya tidak ada)
+// FIX #7: listener tombol telepon darurat
 document.getElementById('emergency-btn').addEventListener('click', () => {
   const nomor = prompt(
     '🚨 TELEPON DARURAT\n\n• 112 — Darurat umum\n• 110 — Polisi\n• 113 — Pemadam Kebakaran\n• 118 — Ambulans\n\nKetik nomor:'
@@ -164,7 +164,7 @@ shutterBtn.addEventListener('click', () => {
   localStorage.setItem('auPhotos', JSON.stringify(savedPhotos));
 });
 
-// ===== 7. LOGIKA GALERI (FOTO BAWAAN + FOTO USER) =====
+// ===== 7. LOGIKA GALERI =====
 const galleryGrid = document.getElementById('gallery-grid');
 const menuBtn = document.getElementById('menu-gallery-btn');
 const actionBar = document.getElementById('gallery-action-bar');
@@ -211,7 +211,7 @@ function renderGallery() {
     const img = document.createElement('img');
     img.src = photoUrl;
 
-    // FIX #5: jika foto bawaan tidak ada, sembunyikan itemnya (bukan broken image)
+    // FIX #5: jika foto bawaan tidak ada, sembunyikan itemnya
     img.onerror = () => {
       if (defaultPhotos.includes(photoUrl)) itemDiv.style.display = 'none';
     };
