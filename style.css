@@ -137,15 +137,6 @@ body {
   align-items: center;
 }
 
-.bg-spotify { background: #1DB954; }
-.bg-instagram { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
-.bg-youtube { background: #FF0000; }
-.bg-tiktok { background: #000; border: 1px solid #333; }
-.bg-zoom { background: #2D8CFF; }
-.bg-notes { background: #FFD700; color: #000; }
-.bg-game { background: #FF9500; }
-.bg-galeri { background: #fff; }
-
 .page-dots {
   display: flex;
   justify-content: center;
@@ -187,10 +178,6 @@ body {
 .dock .app-name {
   display: none;
 }
-
-.bg-camera { background: #ccc; color: #555; }
-.bg-phone { background: #34C759; }
-.bg-whatsapp { background: #25D366; }
 
 .home-hint {
   text-align: center;
@@ -351,3 +338,12 @@ body {
 /* ===== LAYAR LIHAT FOTO (PREVIEW) ===== */
 #photo-view-screen { background: #000; display: flex; justify-content: center; align-items: center; z-index: 20; }
 #full-photo { width: 100%; height: 100%; object-fit: contain; }
+
+/* ===== STYLE UNTUK IKON GAMBAR (.jpg) DI BERANDA & DOCK ===== */
+.app-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 14px;
+  display: block;
+}
