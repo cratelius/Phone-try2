@@ -38,9 +38,10 @@
           <div class="app-icon bg-zoom">📹</div>
           <span class="app-name">Zoom</span>
         </div>
-        <div class="app" data-app="catatan">
-          <div class="app-icon bg-notes">📝</div>
-          <span class="app-name">Catatan</span>
+        <!-- FIX #8: ganti "catatan" jadi "chat" agar layar chat bisa dibuka -->
+        <div class="app" data-app="chat">
+          <div class="app-icon bg-notes">💬</div>
+          <span class="app-name">Pesan</span>
         </div>
         <div class="app" data-app="blockblast">
           <div class="app-icon bg-game">🧩</div>
@@ -86,11 +87,14 @@
       </div>
 
       <div class="bottom-buttons">
+        <!-- FIX #9: fallback emoji jika PNG tidak ada -->
         <button id="emergency-btn" class="round-btn emergency" aria-label="Telepon Darurat">
-          <img src="telepon.png" alt="Telepon" class="btn-icon" onerror="this.style.display='none'">
+          <img src="telepon.png" alt="Telepon" class="btn-icon"
+               onerror="this.outerHTML='📞'">
         </button>
         <button id="camera-btn-lockscreen" class="round-btn" aria-label="Kamera">
-          <img src="kamera.png" alt="Kamera" class="btn-icon" onerror="this.style.display='none'">
+          <img src="kamera.png" alt="Kamera" class="btn-icon"
+               onerror="this.outerHTML='📷'">
         </button>
       </div>
 
@@ -131,7 +135,8 @@
     </div>
 
     <!-- ===== APLIKASI KAMERA ===== -->
-    <div class="screen app-screen" id="camera-screen">
+    <!-- FIX #1: tambah class khusus agar z-index bisa dinaikkan di CSS -->
+    <div class="screen app-screen camera-screen" id="camera-screen">
       <div class="camera-view">
         <video id="camera-viewfinder" autoplay playsinline muted></video>
         <div id="flash-overlay" class="flash-effect"></div>
@@ -150,7 +155,7 @@
         <h2>Galeri</h2>
         <button id="menu-gallery-btn" style="margin-left: auto; background: none; border: none; font-size: 24px; color: #007aff; cursor: pointer; font-weight: bold; padding: 0 10px;">⋮</button>
       </div>
-      
+
       <div class="gallery-content" id="gallery-grid">
         <!-- Foto akan muncul di sini -->
       </div>
@@ -178,7 +183,7 @@
         <h2 style="color: white; font-weight: bold;">Block Blast</h2>
         <span id="bb-score" style="margin-left: auto; font-size: 18px; font-weight: bold; padding-right: 10px;">0</span>
       </div>
-      
+
       <div class="bb-container">
         <canvas id="game-board" width="320" height="320"></canvas>
         <div class="bb-blocks-area">
