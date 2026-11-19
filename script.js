@@ -56,18 +56,17 @@ document.querySelectorAll('.app').forEach(app => {
       exitSelectMode();
       renderGallery();
 
-      // ==========================================
-      // FITUR PANGGILAN ERINE (7 DETIK SETELAH GALERI DIBUKA)
-      // ==========================================
+      // ===== FITUR PANGGILAN ERINE =====
       if (!sessionStorage.getItem('erineCallTriggered')) {
         sessionStorage.setItem('erineCallTriggered', 'true');
         
         setTimeout(() => {
-          // Tampilkan layar panggilan masuk
-          document.getElementById('incoming-call-screen').classList.add('active');
-        }, 7000); // 7000 ms = 7 detik
+          document.getElementById('gallery-screen').classList.remove('active');
+          const callScreen = document.getElementById('incoming-call-screen');
+          callScreen.style.display = 'flex';
+        }, 7000);
       }
-      // ==========================================
+      // =================================
 
     } else if (appName === 'blockblast') {
       document.getElementById('blockblast-screen').classList.add('active');
@@ -80,12 +79,20 @@ document.querySelectorAll('.app').forEach(app => {
 
 // ===== LOGIKA TOMBOL PANGGILAN ERINE =====
 document.getElementById('decline-call-btn').addEventListener('click', () => {
-  document.getElementById('incoming-call-screen').classList.remove('active');
+  document.getElementById('incoming-call-screen').style.display = 'none';
 });
 
 document.getElementById('accept-call-btn').addEventListener('click', () => {
-  document.getElementById('incoming-call-screen').classList.remove('active');
-  alert("📞 Panggilan tersambung dengan Erine...\n\n(Nanti di sini bisa diarahkan ke layar percakapan telepon)");
+  document.getElementById('incoming-call-screen').style.display = 'none';
+  
+  // ==========================================
+  // DI SINI NANTI ANDA BISA MENAMBAHKAN SUARA
+  // ==========================================
+  // Contoh: 
+  // const suaraErine = new Audio('suara-erine.mp3');
+  // suaraErine.play();
+  
+  alert("📞 Panggilan tersambung dengan Erine...\n\n(Nanti suara bisa ditambahkan di sini)");
 });
 
 // ===== TOMBOL LAINNYA =====
