@@ -65,7 +65,6 @@ document.querySelectorAll('.back-btn[data-target]').forEach(btn => {
   btn.addEventListener('click', () => {
     const targetId = btn.dataset.target;
     
-    // Jika di Galeri sedang mode pilih, Back = Batal Pilih
     if (targetId === 'gallery-screen' && document.getElementById('gallery-grid').classList.contains('select-mode')) {
       exitSelectMode();
       return; 
@@ -157,14 +156,14 @@ const cancelSelectBtn = document.getElementById('cancel-select-btn');
 const deleteSelectedBtn = document.getElementById('delete-selected-btn');
 const selectedCountText = document.getElementById('selected-count');
 
-// Elemen untuk layar pratinjau foto
 const photoViewScreen = document.getElementById('photo-view-screen');
 const fullPhotoImg = document.getElementById('full-photo');
 const closePhotoBtn = document.getElementById('close-photo-btn');
+const deletePreviewBtn = document.getElementById('delete-preview-btn');
 
 let isSelectMode = false;
+let currentPreviewSrc = '';
 
-// DAFTAR FOTO BAWAAN
 const defaultPhotos = [
   "foto1.jpg", "foto2.jpg", "foto3.jpg", "foto4.jpg",
   "foto5.jpg", "foto6.jpg", "foto7.jpg", "foto8.jpg",
@@ -205,7 +204,7 @@ function renderGallery() {
         itemDiv.classList.toggle('selected');
         updateSelectedCount();
       } else {
-        // Buka layar pratinjau foto
+        currentPreviewSrc = photoUrl;
         fullPhotoImg.src = photoUrl;
         photoViewScreen.classList.add('active');
       }
@@ -217,10 +216,17 @@ function renderGallery() {
   });
 }
 
-// Tutup Pratinjau Foto (Kembali ke Galeri)
 closePhotoBtn.addEventListener('click', () => {
   photoViewScreen.classList.remove('active');
-  fullPhotoImg.src = ''; // Bersihkan gambar
+  fullPhotoImg.src = '';
+});
+
+deletePreviewBtn.addEventListener('click', () => {
+  if (confirm("Hapus foto ini?")) {
+    deletePhotoFromStorage(currentPreviewSrc);
+    photoViewScreen.classList.remove('active');
+    fullPhotoImg.src = '';
+  }
 });
 
 function updateSelectedCount() {
@@ -228,7 +234,6 @@ function updateSelectedCount() {
   selectedCountText.textContent = `${count} dipilih`;
 }
 
-// Aktifkan Mode Pilih (Klik Titik Tiga)
 menuBtn.addEventListener('click', () => {
   if (document.querySelectorAll('.gallery-item').length === 0) return;
   isSelectMode = true;
@@ -246,34 +251,30 @@ function exitSelectMode() {
   document.querySelectorAll('.gallery-item').forEach(item => item.classList.remove('selected'));
 }
 
-// Logika Menghapus Foto
+function deletePhotoFromStorage(photoUrl) {
+  let userPhotos = JSON.parse(localStorage.getItem('auPhotos')) || [];
+  let deletedDefaults = JSON.parse(localStorage.getItem('deletedDefaults')) || [];
+
+  if (defaultPhotos.includes(photoUrl)) {
+    if (!deletedDefaults.includes(photoUrl)) deletedDefaults.push(photoUrl);
+  } else {
+    const index = userPhotos.indexOf(photoUrl);
+    if (index > -1) userPhotos.splice(index, 1);
+  }
+
+  localStorage.setItem('auPhotos', JSON.stringify(userPhotos));
+  localStorage.setItem('deletedDefaults', JSON.stringify(deletedDefaults));
+  renderGallery();
+}
+
 deleteSelectedBtn.addEventListener('click', () => {
   const selected = document.querySelectorAll('.gallery-item.selected');
-  
-  if (selected.length === 0) {
-    alert("Pilih minimal satu foto terlebih dahulu dengan mencentangnya.");
-    return;
-  }
+  if (selected.length === 0) return alert("Pilih minimal satu foto terlebih dahulu.");
   
   if (confirm(`Hapus ${selected.length} foto ini?`)) {
-    let userPhotos = JSON.parse(localStorage.getItem('auPhotos')) || [];
-    let deletedDefaults = JSON.parse(localStorage.getItem('deletedDefaults')) || [];
-    
     let urlsToDelete = [];
     selected.forEach(item => urlsToDelete.push(item.dataset.src));
-
-    urlsToDelete.forEach(url => {
-      if (defaultPhotos.includes(url)) {
-        if (!deletedDefaults.includes(url)) deletedDefaults.push(url);
-      } else {
-        const index = userPhotos.indexOf(url);
-        if (index > -1) userPhotos.splice(index, 1);
-      }
-    });
-
-    localStorage.setItem('auPhotos', JSON.stringify(userPhotos));
-    localStorage.setItem('deletedDefaults', JSON.stringify(deletedDefaults));
-    
+    urlsToDelete.forEach(url => deletePhotoFromStorage(url));
     exitSelectMode();
     renderGallery();
   }
