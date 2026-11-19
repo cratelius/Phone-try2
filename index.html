@@ -13,7 +13,10 @@
     <div class="screen home-screen" id="home-screen">
       <div class="ios-status-bar">
         <span class="ios-time" id="ios-time">08:55</span>
-        <span class="ios-icons">📶 🔋</span>
+        <!-- Ganti ikon dengan wifi.jpg -->
+        <div style="display: flex; align-items: center; gap: 5px;">
+          <img src="wifi.jpg" alt="Status" class="status-icon-img">
+        </div>
       </div>
 
       <div class="app-grid">
@@ -59,11 +62,9 @@
 
       <div class="dock">
         <div class="app" data-app="kamera">
-          <!-- Menggunakan kamera2.jpg -->
           <div class="app-icon"><img src="kamera2.jpg" alt=""></div>
         </div>
         <div class="app" data-app="telepon">
-          <!-- Menggunakan telepon2.jpg -->
           <div class="app-icon"><img src="telepon2.jpg" alt=""></div>
         </div>
         <div class="app" data-app="whatsapp">
@@ -75,11 +76,15 @@
       <div class="home-hint">Geser ke bawah untuk kembali ke lockscreen</div>
     </div>
 
-    <!-- ===== LOCKSCREEN (TETAP PAKAI .PNG) ===== -->
+    <!-- ===== LOCKSCREEN ===== -->
     <div class="screen lockscreen" id="lockscreen">
       <div class="status-bar">
         <span class="carrier">Telkomsel</span>
-        <span class="icons">📶 🔋 87%</span>
+        <!-- Ganti ikon dengan wifi.jpg -->
+        <div style="display: flex; align-items: center; gap: 5px;">
+          <img src="wifi.jpg" alt="Status" class="status-icon-img">
+          <span>87%</span>
+        </div>
       </div>
 
       <div class="clock-area">
@@ -89,11 +94,9 @@
 
       <div class="bottom-buttons">
         <button id="emergency-btn" class="round-btn emergency" aria-label="Telepon Darurat">
-          <!-- Tetap pakai telepon.png -->
           <img src="telepon.png" alt="" class="btn-icon" onerror="this.outerHTML='📞'">
         </button>
         <button id="camera-btn-lockscreen" class="round-btn" aria-label="Kamera">
-          <!-- Tetap pakai kamera.png -->
           <img src="kamera.png" alt="" class="btn-icon" onerror="this.outerHTML='📷'">
         </button>
       </div>
