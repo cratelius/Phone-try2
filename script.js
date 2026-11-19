@@ -145,7 +145,7 @@ shutterBtn.addEventListener('click', () => {
   localStorage.setItem('auPhotos', JSON.stringify(savedPhotos));
 });
 
-// ===== 7. LOGIKA GALERI =====
+// ===== 7. LOGIKA GALERI (FOTO BAWAAN + FOTO USER) =====
 const galleryGrid = document.getElementById('gallery-grid');
 const menuBtn = document.getElementById('menu-gallery-btn');
 const actionBar = document.getElementById('gallery-action-bar');
@@ -155,31 +155,62 @@ const selectedCountText = document.getElementById('selected-count');
 
 let isSelectMode = false;
 
+// DAFTAR FOTO BAWAAN (Menggunakan format foto1, foto2, dst)
+const defaultPhotos = [
+  "foto1.jpg", "foto2.jpg", "foto3.jpg", "foto4.jpg",
+  "foto5.jpg", "foto6.jpg", "foto7.jpg", "foto8.jpg",
+  "foto9.jpg", "foto10.jpg", "foto11.jpg", "foto12.jpg"
+];
+
+// Fungsi untuk mendapatkan semua foto (Bawaan + Ambilan User - Yang Dihapus)
+function getAllPhotos() {
+  // 1. Ambil foto user dari localStorage (hasil kamera)
+  let userPhotos = JSON.parse(localStorage.getItem('auPhotos')) || [];
+  
+  // 2. Ambil daftar foto bawaan yang sudah dihapus oleh user
+  let deletedDefaults = JSON.parse(localStorage.getItem('deletedDefaults')) || [];
+  
+  // 3. Filter foto bawaan: Hanya ambil yang belum dihapus
+  let activeDefaults = defaultPhotos.filter(photo => !deletedDefaults.includes(photo));
+
+  // 4. Gabungkan foto user dan foto bawaan
+  return [...userPhotos, ...activeDefaults];
+}
+
+// Fungsi Render Galeri
 function renderGallery() {
   galleryGrid.innerHTML = '';
-  let savedPhotos = JSON.parse(localStorage.getItem('auPhotos')) || [];
-  if (savedPhotos.length === 0) {
+  let allPhotos = getAllPhotos();
+
+  if (allPhotos.length === 0) {
     galleryGrid.innerHTML = '<div class="empty-gallery">Belum ada foto.</div>';
     return;
   }
-  savedPhotos.forEach((photoUrl, index) => {
+
+  allPhotos.forEach((photoUrl, index) => {
     const itemDiv = document.createElement('div');
     itemDiv.className = 'gallery-item';
     itemDiv.dataset.index = index; 
+    itemDiv.dataset.src = photoUrl; // Simpan nama file asli
+
     const img = document.createElement('img');
     img.src = photoUrl;
+    
     const checkCircle = document.createElement('div');
     checkCircle.className = 'check-circle';
     checkCircle.innerHTML = '✓';
+
     itemDiv.addEventListener('click', () => {
       if (isSelectMode) {
         itemDiv.classList.toggle('selected');
         updateSelectedCount();
       } else {
+        // Buka gambar ukuran penuh di tab baru
         const win = window.open();
         win.document.write(`<img src="${photoUrl}" style="max-width:100%; max-height:100vh; display:block; margin:auto;">`);
       }
     });
+
     itemDiv.appendChild(img);
     itemDiv.appendChild(checkCircle);
     galleryGrid.appendChild(itemDiv);
@@ -208,15 +239,34 @@ function exitSelectMode() {
   document.querySelectorAll('.gallery-item').forEach(item => item.classList.remove('selected'));
 }
 
+// Logika Menghapus Foto
 deleteSelectedBtn.addEventListener('click', () => {
   const selected = document.querySelectorAll('.gallery-item.selected');
   if (selected.length === 0) return alert("Pilih minimal satu foto.");
+  
   if (confirm(`Hapus ${selected.length} foto ini?`)) {
-    let savedPhotos = JSON.parse(localStorage.getItem('auPhotos')) || [];
-    let indexes = [];
-    selected.forEach(item => indexes.push(parseInt(item.dataset.index)));
-    indexes.sort((a, b) => b - a).forEach(i => savedPhotos.splice(i, 1));
-    localStorage.setItem('auPhotos', JSON.stringify(savedPhotos));
+    let userPhotos = JSON.parse(localStorage.getItem('auPhotos')) || [];
+    let deletedDefaults = JSON.parse(localStorage.getItem('deletedDefaults')) || [];
+    
+    // Kumpulkan URL/nama file foto yang akan dihapus
+    let urlsToDelete = [];
+    selected.forEach(item => urlsToDelete.push(item.dataset.src));
+
+    urlsToDelete.forEach(url => {
+      // Jika yang dihapus adalah foto bawaan (namanya ada di defaultPhotos)
+      if (defaultPhotos.includes(url)) {
+        if (!deletedDefaults.includes(url)) deletedDefaults.push(url);
+      } else {
+        // Jika yang dihapus adalah foto user (Base64), hapus dari array userPhotos
+        const index = userPhotos.indexOf(url);
+        if (index > -1) userPhotos.splice(index, 1);
+      }
+    });
+
+    // Simpan perubahan ke localStorage agar tidak muncul lagi saat di-refresh
+    localStorage.setItem('auPhotos', JSON.stringify(userPhotos));
+    localStorage.setItem('deletedDefaults', JSON.stringify(deletedDefaults));
+    
     exitSelectMode();
     renderGallery();
   }
