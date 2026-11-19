@@ -364,6 +364,6 @@ body {
   height: 12px !important; 
   width: 18px !important;  
   object-fit: cover;
-  border-radius: 3px;
+  border-radius: 50%; /* Membuat gambar kotak JPG menjadi bulat agar kotak putihnya tidak terlalu kaku */
   display: inline-block;
 }
