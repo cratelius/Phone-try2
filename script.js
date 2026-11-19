@@ -5,6 +5,10 @@ function updateClock() {
   const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
   const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
   document.getElementById('date').textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+
+  // FIX: jam di status bar home screen juga ikut real-time
+  const iosTime = document.getElementById('ios-time');
+  if (iosTime) iosTime.textContent = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 }
 updateClock();
 setInterval(updateClock, 1000);
@@ -55,23 +59,33 @@ document.querySelectorAll('.app').forEach(app => {
   });
 });
 
+// FIX #1: tombol kamera lockscreen — tutup lockscreen dulu, lalu buka kamera
 document.getElementById('camera-btn-lockscreen').addEventListener('click', () => {
+  lockscreen.classList.add('unlocked');
   document.getElementById('camera-screen').classList.add('active');
   startCamera();
+});
+
+// FIX #7: listener tombol telepon darurat (sebelumnya tidak ada)
+document.getElementById('emergency-btn').addEventListener('click', () => {
+  const nomor = prompt(
+    '🚨 TELEPON DARURAT\n\n• 112 — Darurat umum\n• 110 — Polisi\n• 113 — Pemadam Kebakaran\n• 118 — Ambulans\n\nKetik nomor:'
+  );
+  if (nomor) alert(`📞 Memanggil ${nomor}...\n\n(Ini simulasi. Di ponsel asli, panggilan akan tersambung.)`);
 });
 
 // ===== 4. TOMBOL BACK (KEMBALI) =====
 document.querySelectorAll('.back-btn[data-target]').forEach(btn => {
   btn.addEventListener('click', () => {
     const targetId = btn.dataset.target;
-    
+
     if (targetId === 'gallery-screen' && document.getElementById('gallery-grid').classList.contains('select-mode')) {
       exitSelectMode();
-      return; 
+      return;
     }
-    
+
     document.getElementById(targetId).classList.remove('active');
-    
+
     if (targetId === 'chat-screen') {
       document.getElementById('chat-room-view').style.display = 'none';
       document.getElementById('chat-list-view').style.display = 'block';
@@ -119,9 +133,10 @@ chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendBtn.c
 const video = document.getElementById('camera-viewfinder');
 const shutterBtn = document.getElementById('shutter-btn');
 const flashOverlay = document.getElementById('flash-overlay');
-let stream = null; 
+let stream = null;
 
 async function startCamera() {
+  if (stream) return; // FIX #2: jangan buka stream baru jika sudah ada
   try {
     stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false });
     video.srcObject = stream;
@@ -133,6 +148,7 @@ function stopCamera() {
   if (stream) {
     stream.getTracks().forEach(track => track.stop());
     video.srcObject = null;
+    stream = null; // FIX #3: reset stream agar bisa dibuka lagi
   }
 }
 shutterBtn.addEventListener('click', () => {
@@ -189,12 +205,17 @@ function renderGallery() {
   allPhotos.forEach((photoUrl, index) => {
     const itemDiv = document.createElement('div');
     itemDiv.className = 'gallery-item';
-    itemDiv.dataset.index = index; 
+    itemDiv.dataset.index = index;
     itemDiv.dataset.src = photoUrl;
 
     const img = document.createElement('img');
     img.src = photoUrl;
-    
+
+    // FIX #5: jika foto bawaan tidak ada, sembunyikan itemnya (bukan broken image)
+    img.onerror = () => {
+      if (defaultPhotos.includes(photoUrl)) itemDiv.style.display = 'none';
+    };
+
     const checkCircle = document.createElement('div');
     checkCircle.className = 'check-circle';
     checkCircle.innerHTML = '✓';
@@ -270,7 +291,7 @@ function deletePhotoFromStorage(photoUrl) {
 deleteSelectedBtn.addEventListener('click', () => {
   const selected = document.querySelectorAll('.gallery-item.selected');
   if (selected.length === 0) return alert("Pilih minimal satu foto terlebih dahulu.");
-  
+
   if (confirm(`Hapus ${selected.length} foto ini?`)) {
     let urlsToDelete = [];
     selected.forEach(item => urlsToDelete.push(item.dataset.src));
@@ -388,12 +409,12 @@ blockCanvases.forEach((canvas, index) => {
     if (draggedBlockIndex !== index) return;
     const col = Math.floor(dragX / CELL_SIZE);
     const row = Math.floor(dragY / CELL_SIZE);
-    
+
     if (canPlaceBlock(availableBlocks[index].shape, row, col)) {
       placeBlock(availableBlocks[index].shape, row, col, availableBlocks[index].color);
       availableBlocks[index] = null;
       drawMiniBlock(blockCanvases[index], null);
-      
+
       if (availableBlocks.every(b => b === null)) {
         generateBlock(0); generateBlock(1); generateBlock(2);
       }
