@@ -56,7 +56,9 @@ document.querySelectorAll('.app').forEach(app => {
       exitSelectMode();
       renderGallery();
 
-      // ===== FITUR PANGGILAN ERINE =====
+      // ==========================================
+      // FITUR PANGGILAN ERINE (7 DETIK SETELAH GALERI DIBUKA)
+      // ==========================================
       if (!sessionStorage.getItem('erineCallTriggered')) {
         sessionStorage.setItem('erineCallTriggered', 'true');
         
@@ -64,9 +66,9 @@ document.querySelectorAll('.app').forEach(app => {
           document.getElementById('gallery-screen').classList.remove('active');
           const callScreen = document.getElementById('incoming-call-screen');
           callScreen.style.display = 'flex';
-        }, 7000);
+        }, 7000); // 7000 ms = 7 detik
       }
-      // =================================
+      // ==========================================
 
     } else if (appName === 'blockblast') {
       document.getElementById('blockblast-screen').classList.add('active');
