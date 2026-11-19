@@ -60,15 +60,19 @@ document.getElementById('camera-btn-lockscreen').addEventListener('click', () =>
   startCamera();
 });
 
-// ===== 4. TOMBOL BACK =====
+// ===== 4. TOMBOL BACK (KEMBALI) =====
 document.querySelectorAll('.back-btn[data-target]').forEach(btn => {
   btn.addEventListener('click', () => {
     const targetId = btn.dataset.target;
+    
+    // Jika di Galeri sedang mode pilih, Back = Batal Pilih
     if (targetId === 'gallery-screen' && document.getElementById('gallery-grid').classList.contains('select-mode')) {
       exitSelectMode();
       return; 
     }
+    
     document.getElementById(targetId).classList.remove('active');
+    
     if (targetId === 'chat-screen') {
       document.getElementById('chat-room-view').style.display = 'none';
       document.getElementById('chat-list-view').style.display = 'block';
@@ -153,31 +157,27 @@ const cancelSelectBtn = document.getElementById('cancel-select-btn');
 const deleteSelectedBtn = document.getElementById('delete-selected-btn');
 const selectedCountText = document.getElementById('selected-count');
 
+// Elemen untuk layar pratinjau foto
+const photoViewScreen = document.getElementById('photo-view-screen');
+const fullPhotoImg = document.getElementById('full-photo');
+const closePhotoBtn = document.getElementById('close-photo-btn');
+
 let isSelectMode = false;
 
-// DAFTAR FOTO BAWAAN (Menggunakan format foto1, foto2, dst)
+// DAFTAR FOTO BAWAAN
 const defaultPhotos = [
   "foto1.jpg", "foto2.jpg", "foto3.jpg", "foto4.jpg",
   "foto5.jpg", "foto6.jpg", "foto7.jpg", "foto8.jpg",
   "foto9.jpg", "foto10.jpg", "foto11.jpg", "foto12.jpg"
 ];
 
-// Fungsi untuk mendapatkan semua foto (Bawaan + Ambilan User - Yang Dihapus)
 function getAllPhotos() {
-  // 1. Ambil foto user dari localStorage (hasil kamera)
   let userPhotos = JSON.parse(localStorage.getItem('auPhotos')) || [];
-  
-  // 2. Ambil daftar foto bawaan yang sudah dihapus oleh user
   let deletedDefaults = JSON.parse(localStorage.getItem('deletedDefaults')) || [];
-  
-  // 3. Filter foto bawaan: Hanya ambil yang belum dihapus
   let activeDefaults = defaultPhotos.filter(photo => !deletedDefaults.includes(photo));
-
-  // 4. Gabungkan foto user dan foto bawaan
   return [...userPhotos, ...activeDefaults];
 }
 
-// Fungsi Render Galeri
 function renderGallery() {
   galleryGrid.innerHTML = '';
   let allPhotos = getAllPhotos();
@@ -191,7 +191,7 @@ function renderGallery() {
     const itemDiv = document.createElement('div');
     itemDiv.className = 'gallery-item';
     itemDiv.dataset.index = index; 
-    itemDiv.dataset.src = photoUrl; // Simpan nama file asli
+    itemDiv.dataset.src = photoUrl;
 
     const img = document.createElement('img');
     img.src = photoUrl;
@@ -205,9 +205,9 @@ function renderGallery() {
         itemDiv.classList.toggle('selected');
         updateSelectedCount();
       } else {
-        // Buka gambar ukuran penuh di tab baru
-        const win = window.open();
-        win.document.write(`<img src="${photoUrl}" style="max-width:100%; max-height:100vh; display:block; margin:auto;">`);
+        // Buka layar pratinjau foto
+        fullPhotoImg.src = photoUrl;
+        photoViewScreen.classList.add('active');
       }
     });
 
@@ -217,11 +217,18 @@ function renderGallery() {
   });
 }
 
+// Tutup Pratinjau Foto (Kembali ke Galeri)
+closePhotoBtn.addEventListener('click', () => {
+  photoViewScreen.classList.remove('active');
+  fullPhotoImg.src = ''; // Bersihkan gambar
+});
+
 function updateSelectedCount() {
   const count = document.querySelectorAll('.gallery-item.selected').length;
   selectedCountText.textContent = `${count} dipilih`;
 }
 
+// Aktifkan Mode Pilih (Klik Titik Tiga)
 menuBtn.addEventListener('click', () => {
   if (document.querySelectorAll('.gallery-item').length === 0) return;
   isSelectMode = true;
@@ -242,28 +249,28 @@ function exitSelectMode() {
 // Logika Menghapus Foto
 deleteSelectedBtn.addEventListener('click', () => {
   const selected = document.querySelectorAll('.gallery-item.selected');
-  if (selected.length === 0) return alert("Pilih minimal satu foto.");
+  
+  if (selected.length === 0) {
+    alert("Pilih minimal satu foto terlebih dahulu dengan mencentangnya.");
+    return;
+  }
   
   if (confirm(`Hapus ${selected.length} foto ini?`)) {
     let userPhotos = JSON.parse(localStorage.getItem('auPhotos')) || [];
     let deletedDefaults = JSON.parse(localStorage.getItem('deletedDefaults')) || [];
     
-    // Kumpulkan URL/nama file foto yang akan dihapus
     let urlsToDelete = [];
     selected.forEach(item => urlsToDelete.push(item.dataset.src));
 
     urlsToDelete.forEach(url => {
-      // Jika yang dihapus adalah foto bawaan (namanya ada di defaultPhotos)
       if (defaultPhotos.includes(url)) {
         if (!deletedDefaults.includes(url)) deletedDefaults.push(url);
       } else {
-        // Jika yang dihapus adalah foto user (Base64), hapus dari array userPhotos
         const index = userPhotos.indexOf(url);
         if (index > -1) userPhotos.splice(index, 1);
       }
     });
 
-    // Simpan perubahan ke localStorage agar tidak muncul lagi saat di-refresh
     localStorage.setItem('auPhotos', JSON.stringify(userPhotos));
     localStorage.setItem('deletedDefaults', JSON.stringify(deletedDefaults));
     
