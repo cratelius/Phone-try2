@@ -181,7 +181,7 @@ body {
 }
 
 .dock .app {
-  width: 60px; 
+  width: 60px;
   flex-shrink: 0;
 }
 
@@ -191,7 +191,7 @@ body {
 }
 
 .dock .app-name {
-  display: none; 
+  display: none;
 }
 
 .bg-camera { background: #ccc; color: #555; }
@@ -216,6 +216,11 @@ body {
 }
 .app-screen.active { transform: translateY(0); }
 
+/* FIX #1: kamera harus di atas lockscreen (z-index 3) */
+.camera-screen {
+  z-index: 4 !important;
+}
+
 /* ===== STATUS BAR LOCKSCREEN ===== */
 .status-bar {
   display: flex;
@@ -231,10 +236,11 @@ body {
 .clock { font-size: 76px; font-weight: 200; letter-spacing: 2px; }
 .date { font-size: 16px; margin-top: 8px; opacity: 0.85; }
 .bottom-buttons { display: flex; justify-content: space-between; padding: 0 40px 30px; }
-.round-btn { width: 48px; height: 48px; border-radius: 50%; border: none; background: rgba(255, 255, 255, 0.18); backdrop-filter: blur(10px); cursor: pointer; display: flex; justify-content: center; align-items: center; }
+.round-btn { width: 48px; height: 48px; border-radius: 50%; border: none; background: rgba(255, 255, 255, 0.18); backdrop-filter: blur(10px); cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 22px; color: #fff; }
 .round-btn:active { transform: scale(0.9); }
 .round-btn.emergency { background: rgba(255, 59, 48, 0.75); }
-.btn-icon { width: 14px; height: 14px; object-fit: contain; filter: invert(1); pointer-events: none; }
+/* FIX: ukuran ikon lebih besar agar terlihat jelas */
+.btn-icon { width: 24px; height: 24px; object-fit: contain; filter: invert(1); pointer-events: none; }
 .swipe-hint { text-align: center; font-size: 13px; padding-bottom: 18px; opacity: 0.6; animation: pulse 2s infinite; }
 @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.9; } }
 
