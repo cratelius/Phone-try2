@@ -38,7 +38,6 @@
           <div class="app-icon bg-zoom">📹</div>
           <span class="app-name">Zoom</span>
         </div>
-        <!-- FIX #8: "catatan" diganti "chat" agar layar chat bisa dibuka -->
         <div class="app" data-app="chat">
           <div class="app-icon bg-notes">💬</div>
           <span class="app-name">Pesan</span>
@@ -87,14 +86,11 @@
       </div>
 
       <div class="bottom-buttons">
-        <!-- FIX #9: fallback emoji jika PNG tidak ada -->
         <button id="emergency-btn" class="round-btn emergency" aria-label="Telepon Darurat">
-          <img src="telepon.png" alt="Telepon" class="btn-icon"
-               onerror="this.outerHTML='📞'">
+          <img src="telepon.png" alt="Telepon" class="btn-icon" onerror="this.outerHTML='📞'">
         </button>
         <button id="camera-btn-lockscreen" class="round-btn" aria-label="Kamera">
-          <img src="kamera.png" alt="Kamera" class="btn-icon"
-               onerror="this.outerHTML='📷'">
+          <img src="kamera.png" alt="Kamera" class="btn-icon" onerror="this.outerHTML='📷'">
         </button>
       </div>
 
@@ -139,10 +135,11 @@
       <div class="camera-view">
         <video id="camera-viewfinder" autoplay playsinline muted></video>
         <div id="flash-overlay" class="flash-effect"></div>
+        
+        <!-- Tombol Kembali (X) -->
+        <button class="camera-close-btn" onclick="tutupKamera()">✕</button>
 
-        <!-- FIX: tombol ✕ di pojok kiri atas, di luar .camera-controls -->
-        <button class="back-btn camera-close-btn" data-target="camera-screen">✕</button>
-
+        <!-- Tombol Jepret -->
         <div class="camera-controls">
           <button id="shutter-btn" class="shutter-btn"></button>
         </div>
