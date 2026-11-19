@@ -94,6 +94,7 @@ body {
   width: 100%;
 }
 
+/* ===== STYLE UNTUK IKON GAMBAR ===== */
 .app-icon {
   width: 60px;
   height: 60px;
@@ -101,9 +102,20 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 32px;
+  overflow: hidden;
+  position: relative;
+  color: transparent;
+  font-size: 10px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   transition: transform 0.15s;
+}
+
+.app-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 14px;
+  display: block;
 }
 
 .app:active .app-icon {
@@ -338,12 +350,3 @@ body {
 /* ===== LAYAR LIHAT FOTO (PREVIEW) ===== */
 #photo-view-screen { background: #000; display: flex; justify-content: center; align-items: center; z-index: 20; }
 #full-photo { width: 100%; height: 100%; object-fit: contain; }
-
-/* ===== STYLE UNTUK IKON GAMBAR (.jpg) DI BERANDA & DOCK ===== */
-.app-icon img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 14px;
-  display: block;
-}
