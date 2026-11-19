@@ -1,4 +1,4 @@
-// ===== 1. JAM DAN TANGGAL =====
+// ===== 1. JAM DAN TANGGAL REAL-TIME =====
 function updateClock() {
   const now = new Date();
   document.getElementById('clock').textContent = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
@@ -44,8 +44,13 @@ document.querySelectorAll('.app').forEach(app => {
       startCamera();
     } else if (appName === 'galeri') {
       document.getElementById('gallery-screen').classList.add('active');
-      exitSelectMode(); // Pastikan selalu normal saat dibuka
+      exitSelectMode();
       renderGallery();
+    } else if (appName === 'blockblast') {
+      document.getElementById('blockblast-screen').classList.add('active');
+      if (board.every(row => row.every(cell => cell === 0))) startGame();
+    } else {
+      alert(`Aplikasi ${appName} belum tersedia.`);
     }
   });
 });
@@ -59,13 +64,10 @@ document.getElementById('camera-btn-lockscreen').addEventListener('click', () =>
 document.querySelectorAll('.back-btn[data-target]').forEach(btn => {
   btn.addEventListener('click', () => {
     const targetId = btn.dataset.target;
-    
-    // Jika di Galeri sedang mode pilih, Back = Batal Pilih
     if (targetId === 'gallery-screen' && document.getElementById('gallery-grid').classList.contains('select-mode')) {
       exitSelectMode();
       return; 
     }
-
     document.getElementById(targetId).classList.remove('active');
     if (targetId === 'chat-screen') {
       document.getElementById('chat-room-view').style.display = 'none';
@@ -143,7 +145,7 @@ shutterBtn.addEventListener('click', () => {
   localStorage.setItem('auPhotos', JSON.stringify(savedPhotos));
 });
 
-// ===== 7. LOGIKA GALERI (MODE PILIH) =====
+// ===== 7. LOGIKA GALERI =====
 const galleryGrid = document.getElementById('gallery-grid');
 const menuBtn = document.getElementById('menu-gallery-btn');
 const actionBar = document.getElementById('gallery-action-bar');
@@ -156,24 +158,19 @@ let isSelectMode = false;
 function renderGallery() {
   galleryGrid.innerHTML = '';
   let savedPhotos = JSON.parse(localStorage.getItem('auPhotos')) || [];
-
   if (savedPhotos.length === 0) {
     galleryGrid.innerHTML = '<div class="empty-gallery">Belum ada foto.</div>';
     return;
   }
-
   savedPhotos.forEach((photoUrl, index) => {
     const itemDiv = document.createElement('div');
     itemDiv.className = 'gallery-item';
     itemDiv.dataset.index = index; 
-
     const img = document.createElement('img');
     img.src = photoUrl;
-
     const checkCircle = document.createElement('div');
     checkCircle.className = 'check-circle';
     checkCircle.innerHTML = '✓';
-
     itemDiv.addEventListener('click', () => {
       if (isSelectMode) {
         itemDiv.classList.toggle('selected');
@@ -183,7 +180,6 @@ function renderGallery() {
         win.document.write(`<img src="${photoUrl}" style="max-width:100%; max-height:100vh; display:block; margin:auto;">`);
       }
     });
-
     itemDiv.appendChild(img);
     itemDiv.appendChild(checkCircle);
     galleryGrid.appendChild(itemDiv);
@@ -195,43 +191,241 @@ function updateSelectedCount() {
   selectedCountText.textContent = `${count} dipilih`;
 }
 
-// Aktifkan Mode Pilih saat Titik Tiga diklik
 menuBtn.addEventListener('click', () => {
   if (document.querySelectorAll('.gallery-item').length === 0) return;
   isSelectMode = true;
   galleryGrid.classList.add('select-mode');
-  actionBar.style.display = 'flex'; // Tampilkan bar bawah
+  actionBar.style.display = 'flex';
   updateSelectedCount();
 });
 
-// Tombol Batal
 cancelSelectBtn.addEventListener('click', exitSelectMode);
 
 function exitSelectMode() {
   isSelectMode = false;
   galleryGrid.classList.remove('select-mode');
-  actionBar.style.display = 'none'; // Sembunyikan bar bawah
+  actionBar.style.display = 'none';
   document.querySelectorAll('.gallery-item').forEach(item => item.classList.remove('selected'));
 }
 
-// Tombol Hapus di Bar Bawah
 deleteSelectedBtn.addEventListener('click', () => {
   const selected = document.querySelectorAll('.gallery-item.selected');
-  if (selected.length === 0) {
-    alert("Pilih minimal satu foto.");
-    return;
-  }
-
+  if (selected.length === 0) return alert("Pilih minimal satu foto.");
   if (confirm(`Hapus ${selected.length} foto ini?`)) {
     let savedPhotos = JSON.parse(localStorage.getItem('auPhotos')) || [];
     let indexes = [];
     selected.forEach(item => indexes.push(parseInt(item.dataset.index)));
-    
-    // Hapus dari belakang agar index tidak bergeser
     indexes.sort((a, b) => b - a).forEach(i => savedPhotos.splice(i, 1));
-
     localStorage.setItem('auPhotos', JSON.stringify(savedPhotos));
     exitSelectMode();
     renderGallery();
   }
 });
+
+// ===== 8. LOGIKA GAME BLOCK BLAST =====
+const boardCanvas = document.getElementById('game-board');
+const ctx = boardCanvas.getContext('2d');
+const blockCanvases = [
+  document.getElementById('block-1'),
+  document.getElementById('block-2'),
+  document.getElementById('block-3')
+];
+const scoreDisplay = document.getElementById('bb-score');
+const restartBtn = document.getElementById('restart-bb');
+
+const GRID_SIZE = 8;
+const CELL_SIZE = boardCanvas.width / GRID_SIZE;
+
+let board = Array(GRID_SIZE).fill().map(() => Array(GRID_SIZE).fill(0));
+let score = 0;
+let availableBlocks = [null, null, null];
+
+const SHAPES = [
+  [[1, 1, 1, 1]], [[1, 1], [1, 1]], [[1, 1, 1], [0, 1, 0]],
+  [[1, 1, 0], [0, 1, 1]], [[0, 1, 1], [1, 1, 0]], [[1, 1, 1], [1, 0, 0]],
+  [[1, 1, 1], [0, 0, 1]], [[1], [1], [1]]
+];
+const COLORS = ['#ff3b30', '#34C759', '#007aff', '#FFD700', '#FF9500', '#AF52DE'];
+
+function drawBoard() {
+  ctx.clearRect(0, 0, boardCanvas.width, boardCanvas.height);
+  for (let r = 0; r < GRID_SIZE; r++) {
+    for (let c = 0; c < GRID_SIZE; c++) {
+      if (board[r][c] !== 0) {
+        ctx.fillStyle = board[r][c];
+        roundRect(ctx, c * CELL_SIZE + 2, r * CELL_SIZE + 2, CELL_SIZE - 4, CELL_SIZE - 4, 5);
+        ctx.fill();
+      } else {
+        ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+        ctx.strokeRect(c * CELL_SIZE, r * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+      }
+    }
+  }
+}
+
+function generateBlock(index) {
+  const randomShape = SHAPES[Math.floor(Math.random() * SHAPES.length)];
+  const randomColor = COLORS[Math.floor(Math.random() * COLORS.length)];
+  availableBlocks[index] = { shape: randomShape, color: randomColor };
+  drawMiniBlock(blockCanvases[index], availableBlocks[index]);
+}
+
+function drawMiniBlock(canvas, blockData) {
+  const miniCtx = canvas.getContext('2d');
+  miniCtx.clearRect(0, 0, canvas.width, canvas.height);
+  if (!blockData) return;
+  const shape = blockData.shape;
+  const miniCellSize = 20;
+  const startX = (canvas.width - (shape[0].length * miniCellSize)) / 2;
+  const startY = (canvas.height - (shape.length * miniCellSize)) / 2;
+  for (let r = 0; r < shape.length; r++) {
+    for (let c = 0; c < shape[r].length; c++) {
+      if (shape[r][c] === 1) {
+        miniCtx.fillStyle = blockData.color;
+        roundRect(miniCtx, startX + c * miniCellSize + 1, startY + r * miniCellSize + 1, miniCellSize - 2, miniCellSize - 2, 3);
+        miniCtx.fill();
+      }
+    }
+  }
+}
+
+function roundRect(ctx, x, y, width, height, radius) {
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
+}
+
+let draggedBlockIndex = -1;
+let dragX = 0;
+let dragY = 0;
+
+blockCanvases.forEach((canvas, index) => {
+  canvas.addEventListener('pointerdown', (e) => {
+    if (!availableBlocks[index]) return;
+    draggedBlockIndex = index;
+    canvas.setPointerCapture(e.pointerId);
+    const rect = boardCanvas.getBoundingClientRect();
+    dragX = e.clientX - rect.left;
+    dragY = e.clientY - rect.top;
+  });
+
+  canvas.addEventListener('pointermove', (e) => {
+    if (draggedBlockIndex !== index) return;
+    const rect = boardCanvas.getBoundingClientRect();
+    dragX = e.clientX - rect.left;
+    dragY = e.clientY - rect.top;
+    drawBoard();
+    drawDraggedBlock();
+  });
+
+  canvas.addEventListener('pointerup', (e) => {
+    if (draggedBlockIndex !== index) return;
+    const col = Math.floor(dragX / CELL_SIZE);
+    const row = Math.floor(dragY / CELL_SIZE);
+    
+    if (canPlaceBlock(availableBlocks[index].shape, row, col)) {
+      placeBlock(availableBlocks[index].shape, row, col, availableBlocks[index].color);
+      availableBlocks[index] = null;
+      drawMiniBlock(blockCanvases[index], null);
+      
+      if (availableBlocks.every(b => b === null)) {
+        generateBlock(0); generateBlock(1); generateBlock(2);
+      }
+      checkAndClearLines();
+    }
+    draggedBlockIndex = -1;
+    drawBoard();
+  });
+});
+
+function drawDraggedBlock() {
+  if (draggedBlockIndex === -1) return;
+  const block = availableBlocks[draggedBlockIndex];
+  const shape = block.shape;
+  const col = Math.floor(dragX / CELL_SIZE);
+  const row = Math.floor(dragY / CELL_SIZE);
+
+  for (let r = 0; r < shape.length; r++) {
+    for (let c = 0; c < shape[r].length; c++) {
+      if (shape[r][c] === 1) {
+        const x = (col + c) * CELL_SIZE;
+        const y = (row + r) * CELL_SIZE;
+        ctx.fillStyle = block.color + '80';
+        roundRect(ctx, x + 2, y + 2, CELL_SIZE - 4, CELL_SIZE - 4, 5);
+        ctx.fill();
+      }
+    }
+  }
+}
+
+function canPlaceBlock(shape, row, col) {
+  for (let r = 0; r < shape.length; r++) {
+    for (let c = 0; c < shape[r].length; c++) {
+      if (shape[r][c] === 1) {
+        let targetRow = row + r;
+        let targetCol = col + c;
+        if (targetRow < 0 || targetRow >= GRID_SIZE || targetCol < 0 || targetCol >= GRID_SIZE) return false;
+        if (board[targetRow][targetCol] !== 0) return false;
+      }
+    }
+  }
+  return true;
+}
+
+function placeBlock(shape, row, col, color) {
+  for (let r = 0; r < shape.length; r++) {
+    for (let c = 0; c < shape[r].length; c++) {
+      if (shape[r][c] === 1) {
+        board[row + r][col + c] = color;
+      }
+    }
+  }
+}
+
+function checkAndClearLines() {
+  let linesCleared = 0;
+  let rowsToClear = [];
+  let colsToClear = [];
+
+  for (let r = 0; r < GRID_SIZE; r++) {
+    if (board[r].every(cell => cell !== 0)) {
+      rowsToClear.push(r); linesCleared++;
+    }
+  }
+
+  for (let c = 0; c < GRID_SIZE; c++) {
+    let isFull = true;
+    for (let r = 0; r < GRID_SIZE; r++) {
+      if (board[r][c] === 0) { isFull = false; break; }
+    }
+    if (isFull) { colsToClear.push(c); linesCleared++; }
+  }
+
+  rowsToClear.forEach(r => { for (let c = 0; c < GRID_SIZE; c++) board[r][c] = 0; });
+  colsToClear.forEach(c => { for (let r = 0; r < GRID_SIZE; r++) board[r][c] = 0; });
+
+  if (linesCleared > 0) {
+    score += linesCleared * 10;
+    scoreDisplay.textContent = score;
+    boardCanvas.style.transform = 'scale(1.05)';
+    setTimeout(() => boardCanvas.style.transform = 'scale(1)', 150);
+  }
+}
+
+function startGame() {
+  board = Array(GRID_SIZE).fill().map(() => Array(GRID_SIZE).fill(0));
+  score = 0;
+  scoreDisplay.textContent = score;
+  generateBlock(0); generateBlock(1); generateBlock(2);
+  drawBoard();
+}
+
+restartBtn.addEventListener('click', startGame);
