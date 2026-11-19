@@ -11,74 +11,59 @@
 
     <!-- ===== HOME SCREEN ===== -->
     <div class="screen home-screen" id="home-screen">
-      <!-- Status Bar iOS -->
       <div class="ios-status-bar">
         <span class="ios-time" id="ios-time">08:55</span>
         <span class="ios-icons">📶 🔋</span>
       </div>
 
-      <!-- Grid Aplikasi Utama -->
       <div class="app-grid">
-        <!-- Spotify -->
         <div class="app" data-app="spotify">
           <div class="app-icon bg-spotify">🎵</div>
           <span class="app-name">Spotify</span>
         </div>
-        <!-- Instagram -->
         <div class="app" data-app="instagram">
           <div class="app-icon bg-instagram">📷</div>
           <span class="app-name">Instagram</span>
         </div>
-        <!-- YouTube -->
         <div class="app" data-app="youtube">
           <div class="app-icon bg-youtube">▶️</div>
           <span class="app-name">YouTube</span>
         </div>
-        <!-- TikTok -->
         <div class="app" data-app="tiktok">
           <div class="app-icon bg-tiktok">🎵</div>
           <span class="app-name">TikTok</span>
           <div class="badge">246</div>
         </div>
-        <!-- Zoom -->
         <div class="app" data-app="zoom">
           <div class="app-icon bg-zoom">📹</div>
           <span class="app-name">Zoom</span>
         </div>
-        <!-- Catatan -->
         <div class="app" data-app="catatan">
           <div class="app-icon bg-notes">📝</div>
           <span class="app-name">Catatan</span>
         </div>
-        <!-- Block Blast -->
         <div class="app" data-app="blockblast">
           <div class="app-icon bg-game">🧩</div>
           <span class="app-name">Block Blast</span>
         </div>
-        <!-- Galeri -->
         <div class="app" data-app="galeri">
           <div class="app-icon bg-galeri">🌻</div>
           <span class="app-name">Photos</span>
         </div>
       </div>
 
-      <!-- Indikator Halaman -->
       <div class="page-dots">
         <span class="dot active"></span>
         <span class="dot"></span>
       </div>
 
-      <!-- Dock (Bar Bawah) -->
       <div class="dock">
-        <!-- Kamera -->
         <div class="app" data-app="kamera">
           <div class="app-icon bg-camera">📷</div>
         </div>
-        <!-- Telepon -->
         <div class="app" data-app="telepon">
           <div class="app-icon bg-phone">📞</div>
         </div>
-        <!-- WhatsApp -->
         <div class="app" data-app="whatsapp">
           <div class="app-icon bg-whatsapp">💬</div>
           <div class="badge">59</div>
@@ -150,7 +135,6 @@
       <div class="camera-view">
         <video id="camera-viewfinder" autoplay playsinline muted></video>
         <div id="flash-overlay" class="flash-effect"></div>
-        
         <div class="camera-controls">
           <button class="back-btn" data-target="camera-screen" style="color: white; font-size: 28px; z-index: 20;">✕</button>
           <button id="shutter-btn" class="shutter-btn"></button>
@@ -180,9 +164,9 @@
 
     <!-- ===== LAYAR LIHAT FOTO (PREVIEW) ===== -->
     <div class="screen app-screen" id="photo-view-screen" style="background: #000; z-index: 10;">
-      <div class="chat-header" style="background: rgba(0,0,0,0.5); border: none; position: absolute; top: 0; width: 100%; z-index: 12;">
+      <div class="chat-header" style="background: rgba(0,0,0,0.8); border: none; position: absolute; top: 0; width: 100%; z-index: 12; display: flex; justify-content: space-between;">
         <button class="back-btn" id="close-photo-btn" style="color: white;">←</button>
-        <h2 style="color: white;">Foto</h2>
+        <button id="delete-preview-btn" style="background: none; border: none; color: #ff3b30; font-size: 16px; font-weight: bold; cursor: pointer; padding-right: 10px;">Hapus</button>
       </div>
       <img id="full-photo" src="" alt="Foto" style="width: 100%; height: 100%; object-fit: contain;">
     </div>
@@ -196,16 +180,12 @@
       </div>
       
       <div class="bb-container">
-        <!-- Papan Permainan -->
         <canvas id="game-board" width="320" height="320"></canvas>
-        
-        <!-- Tempat Balok Menunggu -->
         <div class="bb-blocks-area">
           <canvas id="block-1" class="bb-block" width="80" height="80"></canvas>
           <canvas id="block-2" class="bb-block" width="80" height="80"></canvas>
           <canvas id="block-3" class="bb-block" width="80" height="80"></canvas>
         </div>
-        
         <button id="restart-bb" style="margin-top: 20px; padding: 10px 20px; border-radius: 20px; border: none; background: #ff3b30; color: white; font-weight: bold; cursor: pointer;">Ulangi Game</button>
       </div>
     </div>
