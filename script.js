@@ -51,8 +51,10 @@ document.querySelectorAll('.app').forEach(app => {
     } else if (appName === 'kamera') {
       document.getElementById('camera-screen').classList.add('active');
       startCamera();
-    } else if (appName === 'whatsapp') { // FITUR BARU: BUKA WHATSAPP
+    } else if (appName === 'whatsapp') {
       document.getElementById('whatsapp-screen').classList.add('active');
+    } else if (appName === 'wattpad') { // FITUR BARU WATTPAD
+      document.getElementById('wattpad-screen').classList.add('active');
     } else if (appName === 'galeri') {
       document.getElementById('gallery-screen').classList.add('active');
       exitSelectMode();
