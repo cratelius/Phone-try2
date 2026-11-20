@@ -51,6 +51,8 @@ document.querySelectorAll('.app').forEach(app => {
     } else if (appName === 'kamera') {
       document.getElementById('camera-screen').classList.add('active');
       startCamera();
+    } else if (appName === 'whatsapp') { // FITUR BARU: BUKA WHATSAPP
+      document.getElementById('whatsapp-screen').classList.add('active');
     } else if (appName === 'galeri') {
       document.getElementById('gallery-screen').classList.add('active');
       exitSelectMode();
@@ -66,11 +68,9 @@ document.querySelectorAll('.app').forEach(app => {
           document.getElementById('gallery-screen').classList.remove('active');
           const callScreen = document.getElementById('incoming-call-screen');
           callScreen.style.display = 'flex';
-          callScreen.classList.add('vibrating'); // Animasi visual getar halus
+          callScreen.classList.add('vibrating');
 
-          // Memicu getar fisik perangkat (jika didukung)
           if (navigator.vibrate) {
-            // Pola getar: 500ms nyala, 1000ms mati, diulang
             navigator.vibrate([500, 1000, 500, 1000, 500, 1000, 500, 1000, 500, 1000]);
           }
         }, 7000); 
@@ -127,12 +127,11 @@ document.addEventListener('mouseup', () => {
 
 // --- Fungsi Menjawab Panggilan ---
 function answerCall() {
-  // Hentikan getar fisik perangkat
   if (navigator.vibrate) navigator.vibrate(0); 
 
   const incomingScreen = document.getElementById('incoming-call-screen');
   incomingScreen.style.display = 'none';
-  incomingScreen.classList.remove('vibrating'); // Hentikan getaran visual
+  incomingScreen.classList.remove('vibrating'); 
   
   setTimeout(() => { swipeThumb.style.transform = `translateX(0px)`; }, 500);
 
