@@ -87,10 +87,9 @@ let suaraErine = null;
 
 // --- Logika Geser (Swipe to Answer) ---
 const swipeThumb = document.getElementById('swipe-thumb');
-const swipeContainer = document.getElementById('swipe-container');
 let isDragging = false;
 let startX = 0;
-let maxDrag = 200; // Batas geser ke kanan
+let maxDrag = 200; 
 
 swipeThumb.addEventListener('mousedown', (e) => {
   isDragging = true;
@@ -113,27 +112,20 @@ document.addEventListener('mouseup', () => {
   const translateX = currentTransform ? parseFloat(currentTransform.replace('translateX(', '').replace('px)', '')) : 0;
 
   if (translateX > maxDrag * 0.8) {
-    // Jika digeser lebih dari 80%, jawab panggilan
     swipeThumb.style.transform = `translateX(${maxDrag}px)`;
     answerCall();
   } else {
-    // Jika tidak, kembalikan ke posisi semula
     swipeThumb.style.transform = `translateX(0px)`;
   }
 });
 
-// --- Fungsi Menjawab Panggilan ---
 function answerCall() {
   const incomingScreen = document.getElementById('incoming-call-screen');
   incomingScreen.style.display = 'none';
-  incomingScreen.classList.remove('vibrating'); // Hentikan getaran
+  incomingScreen.classList.remove('vibrating'); 
   
-  // Reset posisi tombol geser untuk panggilan berikutnya
-  setTimeout(() => {
-    swipeThumb.style.transform = `translateX(0px)`;
-  }, 500);
+  setTimeout(() => { swipeThumb.style.transform = `translateX(0px)`; }, 500);
 
-  // Tampilkan layar panggilan aktif
   const activeCallScreen = document.getElementById('active-call-screen');
   activeCallScreen.style.display = 'flex';
   
@@ -153,7 +145,6 @@ function answerCall() {
   suaraErine.onended = () => { endActiveCall(); };
 }
 
-// --- Fungsi Mengakhiri Panggilan ---
 function endActiveCall() {
   document.getElementById('active-call-screen').style.display = 'none';
   
@@ -450,135 +441,4 @@ function drawMiniBlock(canvas, blockData) {
   const shape = blockData.shape;
   const miniCellSize = 20;
   const startX = (canvas.width - (shape[0].length * miniCellSize)) / 2;
-  const startY = (canvas.height - (shape.length * miniCellSize)) / 2;
-  for (let r = 0; r < shape.length; r++) {
-    for (let c = 0; c < shape[r].length; c++) {
-      if (shape[r][c] === 1) {
-        miniCtx.fillStyle = blockData.color;
-        roundRect(miniCtx, startX + c * miniCellSize + 1, startY + r * miniCellSize + 1, miniCellSize - 2, miniCellSize - 2, 3);
-        miniCtx.fill();
-      }
-    }
-  }
-}
-
-function roundRect(ctx, x, y, width, height, radius) {
-  ctx.beginPath();
-  ctx.moveTo(x + radius, y);
-  ctx.lineTo(x + width - radius, y);
-  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-  ctx.lineTo(x + width, y + height - radius);
-  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-  ctx.lineTo(x + radius, y + height);
-  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-  ctx.lineTo(x, y + radius);
-  ctx.quadraticCurveTo(x, y, x + radius, y);
-  ctx.closePath();
-}
-
-let draggedBlockIndex = -1;
-let dragX = 0, dragY = 0;
-
-blockCanvases.forEach((canvas, index) => {
-  canvas.addEventListener('pointerdown', (e) => {
-    if (!availableBlocks[index]) return;
-    draggedBlockIndex = index;
-    canvas.setPointerCapture(e.pointerId);
-    const rect = boardCanvas.getBoundingClientRect();
-    dragX = e.clientX - rect.left; dragY = e.clientY - rect.top;
-  });
-
-  canvas.addEventListener('pointermove', (e) => {
-    if (draggedBlockIndex !== index) return;
-    const rect = boardCanvas.getBoundingClientRect();
-    dragX = e.clientX - rect.left; dragY = e.clientY - rect.top;
-    drawBoard(); drawDraggedBlock();
-  });
-
-  canvas.addEventListener('pointerup', (e) => {
-    if (draggedBlockIndex !== index) return;
-    const col = Math.floor(dragX / CELL_SIZE);
-    const row = Math.floor(dragY / CELL_SIZE);
-
-    if (canPlaceBlock(availableBlocks[index].shape, row, col)) {
-      placeBlock(availableBlocks[index].shape, row, col, availableBlocks[index].color);
-      availableBlocks[index] = null;
-      drawMiniBlock(blockCanvases[index], null);
-      if (availableBlocks.every(b => b === null)) { generateBlock(0); generateBlock(1); generateBlock(2); }
-      checkAndClearLines();
-    }
-    draggedBlockIndex = -1;
-    drawBoard();
-  });
-});
-
-function drawDraggedBlock() {
-  if (draggedBlockIndex === -1) return;
-  const block = availableBlocks[draggedBlockIndex];
-  const shape = block.shape;
-  const col = Math.floor(dragX / CELL_SIZE);
-  const row = Math.floor(dragY / CELL_SIZE);
-  for (let r = 0; r < shape.length; r++) {
-    for (let c = 0; c < shape[r].length; c++) {
-      if (shape[r][c] === 1) {
-        const x = (col + c) * CELL_SIZE;
-        const y = (row + r) * CELL_SIZE;
-        ctx.fillStyle = block.color + '80';
-        roundRect(ctx, x + 2, y + 2, CELL_SIZE - 4, CELL_SIZE - 4, 5);
-        ctx.fill();
-      }
-    }
-  }
-}
-
-function canPlaceBlock(shape, row, col) {
-  for (let r = 0; r < shape.length; r++) {
-    for (let c = 0; c < shape[r].length; c++) {
-      if (shape[r][c] === 1) {
-        let targetRow = row + r;
-        let targetCol = col + c;
-        if (targetRow < 0 || targetRow >= GRID_SIZE || targetCol < 0 || targetCol >= GRID_SIZE) return false;
-        if (board[targetRow][targetCol] !== 0) return false;
-      }
-    }
-  }
-  return true;
-}
-
-function placeBlock(shape, row, col, color) {
-  for (let r = 0; r < shape.length; r++) {
-    for (let c = 0; c < shape[r].length; c++) {
-      if (shape[r][c] === 1) board[row + r][col + c] = color;
-    }
-  }
-}
-
-function checkAndClearLines() {
-  let linesCleared = 0;
-  let rowsToClear = [], colsToClear = [];
-  for (let r = 0; r < GRID_SIZE; r++) { if (board[r].every(cell => cell !== 0)) { rowsToClear.push(r); linesCleared++; } }
-  for (let c = 0; c < GRID_SIZE; c++) {
-    let isFull = true;
-    for (let r = 0; r < GRID_SIZE; r++) { if (board[r][c] === 0) { isFull = false; break; } }
-    if (isFull) { colsToClear.push(c); linesCleared++; }
-  }
-  rowsToClear.forEach(r => { for (let c = 0; c < GRID_SIZE; c++) board[r][c] = 0; });
-  colsToClear.forEach(c => { for (let r = 0; r < GRID_SIZE; r++) board[r][c] = 0; });
-
-  if (linesCleared > 0) {
-    score += linesCleared * 10;
-    scoreDisplay.textContent = score;
-    boardCanvas.style.transform = 'scale(1.05)';
-    setTimeout(() => boardCanvas.style.transform = 'scale(1)', 150);
-  }
-}
-
-function startGame() {
-  board = Array(GRID_SIZE).fill().map(() => Array(GRID_SIZE).fill(0));
-  score = 0;
-  scoreDisplay.textContent = score;
-  generateBlock(0); generateBlock(1); generateBlock(2);
-  drawBoard();
-}
-
-restartBtn.addEventListener('click', startGame);
+  const startY = (canvas.height - (shape.length * mini
