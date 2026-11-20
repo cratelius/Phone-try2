@@ -53,16 +53,15 @@ document.querySelectorAll('.app').forEach(app => {
       startCamera();
     } else if (appName === 'whatsapp') {
       document.getElementById('whatsapp-screen').classList.add('active');
-        } else if (appName === 'wattpad') {
-      window.open("https://www.wattpad.com/user/Cratelius", "_blank");
+    } else if (appName === 'wattpad') {
+      // Pindah ke halaman web Wattpad Cratelius
+      window.location.href = "https://www.wattpad.com/user/Cratelius"; 
     } else if (appName === 'galeri') {
       document.getElementById('gallery-screen').classList.add('active');
       exitSelectMode();
       renderGallery();
 
-      // ==========================================
       // FITUR PANGGILAN ERINE (7 DETIK SETELAH GALERI DIBUKA)
-      // ==========================================
       if (!sessionStorage.getItem('erineCallTriggered')) {
         sessionStorage.setItem('erineCallTriggered', 'true');
         
@@ -77,7 +76,6 @@ document.querySelectorAll('.app').forEach(app => {
           }
         }, 7000); 
       }
-      // ==========================================
 
     } else if (appName === 'blockblast') {
       document.getElementById('blockblast-screen').classList.add('active');
@@ -95,18 +93,20 @@ let suaraErine = null;
 
 // --- Logika Geser (Swipe to Answer) ---
 const swipeThumb = document.getElementById('swipe-thumb');
+const swipeContainer = document.getElementById('swipe-container');
 let isDragging = false;
 let startX = 0;
 let maxDrag = 200; 
 
 function startDrag(e) {
   isDragging = true;
-  // Ambil koordinat X dari mouse atau sentuhan
   startX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
 }
 
 function moveDrag(e) {
   if (!isDragging) return;
+  if (e.cancelable) e.preventDefault(); // Mencegah scroll di HP
+  
   let clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
   let dragX = clientX - startX;
   
@@ -131,14 +131,13 @@ function endDrag(e) {
   }
 }
 
-// Event untuk Laptop (Mouse)
+// Event untuk Laptop (Mouse) & HP (Touch)
 swipeThumb.addEventListener('mousedown', startDrag);
 document.addEventListener('mousemove', moveDrag);
 document.addEventListener('mouseup', endDrag);
 
-// Event untuk HP (Touch) - PASTIKAN MENGGUNAKAN E.TOUCHES
 swipeThumb.addEventListener('touchstart', startDrag, { passive: true });
-document.addEventListener('touchmove', moveDrag, { passive: true });
+document.addEventListener('touchmove', moveDrag, { passive: false });
 document.addEventListener('touchend', endDrag);
 
 // --- Fungsi Menjawab Panggilan ---
