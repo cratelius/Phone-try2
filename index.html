@@ -202,16 +202,52 @@
       </div>
     </div>
 
-    <!-- ===== LAYAR PANGGILAN AKTIF (BARU) ===== -->
-    <div class="screen" id="active-call-screen" style="z-index: 999; background: linear-gradient(180deg, #1c1c1e 0%, #000 100%); color: white; display: none; flex-direction: column; justify-content: space-between; padding: 50px 20px;">
-      <div style="text-align: center; margin-top: 30px;">
-        <h1 id="active-caller-name" style="font-size: 36px; font-weight: 500;">Erine</h1>
-        <!-- Log durasi panggilan -->
-        <p id="call-timer" style="font-size: 20px; opacity: 0.8; margin-top: 10px;">00:00</p>
+    <!-- ===== LAYAR PANGGILAN AKTIF (iOS STYLE) ===== -->
+    <div class="screen" id="active-call-screen" style="z-index: 999; background: linear-gradient(180deg, #1c1c1e 0%, #000 100%); color: white; display: none; flex-direction: column; justify-content: space-between; padding: 40px 20px;">
+      
+      <!-- Bagian Atas: Nama & Timer -->
+      <div style="text-align: center; margin-top: 20px;">
+        <h1 id="active-caller-name" style="font-size: 36px; font-weight: 500; margin-bottom: 5px;">Viruna✨</h1>
+        <p id="call-timer" style="font-size: 20px; opacity: 0.8;">00:00</p>
       </div>
-      <div style="display: flex; justify-content: center; margin-bottom: 50px;">
-        <!-- Tombol Tutup Telepon -->
-        <button id="end-call-btn" style="width: 70px; height: 70px; border-radius: 50%; border: none; background: #ff3b30; color: white; font-size: 24px; cursor: pointer; display: flex; justify-content: center; align-items: center; transform: rotate(135deg);">📞</button>
+
+      <!-- Bagian Tengah: Tombol Grid iOS -->
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-top: 50px;">
+        <!-- Mute -->
+        <div style="display: flex; flex-direction: column; align-items: center;">
+          <button id="btn-mute" style="width: 70px; height: 70px; border-radius: 50%; border: none; background: rgba(255,255,255,0.15); color: white; font-size: 24px; cursor: pointer;">🎤</button>
+          <span style="font-size: 12px; margin-top: 8px; opacity: 0.8;">mute</span>
+        </div>
+        <!-- Keypad -->
+        <div style="display: flex; flex-direction: column; align-items: center;">
+          <button onclick="alert('Keypad dibuka')" style="width: 70px; height: 70px; border-radius: 50%; border: none; background: rgba(255,255,255,0.15); color: white; font-size: 24px; cursor: pointer;">⏺</button>
+          <span style="font-size: 12px; margin-top: 8px; opacity: 0.8;">keypad</span>
+        </div>
+        <!-- Speaker -->
+        <div style="display: flex; flex-direction: column; align-items: center;">
+          <button id="btn-speaker" style="width: 70px; height: 70px; border-radius: 50%; border: none; background: rgba(255,255,255,0.15); color: white; font-size: 24px; cursor: pointer;">🔊</button>
+          <span style="font-size: 12px; margin-top: 8px; opacity: 0.8;">speaker</span>
+        </div>
+        <!-- Add Call -->
+        <div style="display: flex; flex-direction: column; align-items: center;">
+          <button onclick="alert('Tambah panggilan')" style="width: 70px; height: 70px; border-radius: 50%; border: none; background: rgba(255,255,255,0.15); color: white; font-size: 24px; cursor: pointer;">➕</button>
+          <span style="font-size: 12px; margin-top: 8px; opacity: 0.8;">add call</span>
+        </div>
+        <!-- FaceTime -->
+        <div style="display: flex; flex-direction: column; align-items: center;">
+          <button onclick="alert('FaceTime dibuka')" style="width: 70px; height: 70px; border-radius: 50%; border: none; background: rgba(255,255,255,0.15); color: white; font-size: 24px; cursor: pointer;">📹</button>
+          <span style="font-size: 12px; margin-top: 8px; opacity: 0.8;">FaceTime</span>
+        </div>
+        <!-- Contacts -->
+        <div style="display: flex; flex-direction: column; align-items: center;">
+          <button onclick="alert('Kontak dibuka')" style="width: 70px; height: 70px; border-radius: 50%; border: none; background: rgba(255,255,255,0.15); color: white; font-size: 24px; cursor: pointer;">👤</button>
+          <span style="font-size: 12px; margin-top: 8px; opacity: 0.8;">contacts</span>
+        </div>
+      </div>
+
+      <!-- Bagian Bawah: Tombol Merah Tutup Telepon -->
+      <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+        <button id="end-call-btn" style="width: 70px; height: 70px; border-radius: 50%; border: none; background: #ff3b30; color: white; font-size: 28px; cursor: pointer; display: flex; justify-content: center; align-items: center; transform: rotate(135deg);">📞</button>
       </div>
     </div>
 
