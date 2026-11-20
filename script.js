@@ -88,13 +88,12 @@ document.getElementById('accept-call-btn').addEventListener('click', () => {
   document.getElementById('incoming-call-screen').style.display = 'none';
   
   // ==========================================
-  // DI SINI NANTI ANDA BISA MENAMBAHKAN SUARA
+  // MEMUTAR SUARA ERINECALL.MPEG
   // ==========================================
-  // Contoh: 
-  // const suaraErine = new Audio('suara-erine.mp3');
-  // suaraErine.play();
-  
-  alert("📞 Panggilan tersambung dengan Erine...\n\n(Nanti suara bisa ditambahkan di sini)");
+  const suaraErine = new Audio('erinecall.mpeg');
+  suaraErine.play().catch(error => {
+    console.log("Gagal memutar suara: ", error);
+  });
 });
 
 // ===== TOMBOL LAINNYA =====
