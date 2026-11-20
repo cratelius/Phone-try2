@@ -93,7 +93,7 @@ document.getElementById('decline-call-btn').addEventListener('click', () => {
 document.getElementById('accept-call-btn').addEventListener('click', () => {
   document.getElementById('incoming-call-screen').style.display = 'none';
   
-  // Tampilkan layar panggilan aktif
+  // Tampilkan layar panggilan aktif (iOS Style)
   const activeCallScreen = document.getElementById('active-call-screen');
   activeCallScreen.style.display = 'flex';
   
@@ -142,6 +142,17 @@ function endActiveCall() {
 // 4. Tombol Tutup Telepon (Tombol Merah)
 document.getElementById('end-call-btn').addEventListener('click', () => {
   endActiveCall();
+});
+
+// 5. Tombol Mute (Simulasi)
+document.getElementById('btn-mute').addEventListener('click', function() {
+  this.style.background = this.style.background === 'white' ? 'rgba(255,255,255,0.15)' : 'white';
+  this.style.color = this.style.color === 'black' ? 'white' : 'black';
+});
+
+// 6. Tombol Speaker (Simulasi)
+document.getElementById('btn-speaker').addEventListener('click', function() {
+  alert('Speaker diaktifkan (Simulasi)');
 });
 
 // ===== TOMBOL LAINNYA =====
