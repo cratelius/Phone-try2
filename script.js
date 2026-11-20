@@ -99,20 +99,24 @@ let isDragging = false;
 let startX = 0;
 let maxDrag = 200; 
 
-swipeThumb.addEventListener('mousedown', (e) => {
+function startDrag(e) {
   isDragging = true;
-  startX = e.clientX;
-});
+  // Ambil koordinat X dari mouse atau sentuhan
+  startX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+}
 
-document.addEventListener('mousemove', (e) => {
+function moveDrag(e) {
   if (!isDragging) return;
-  let dragX = e.clientX - startX;
+  let clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+  let dragX = clientX - startX;
+  
   if (dragX < 0) dragX = 0;
   if (dragX > maxDrag) dragX = maxDrag;
+  
   swipeThumb.style.transform = `translateX(${dragX}px)`;
-});
+}
 
-document.addEventListener('mouseup', () => {
+function endDrag(e) {
   if (!isDragging) return;
   isDragging = false;
   
@@ -125,7 +129,17 @@ document.addEventListener('mouseup', () => {
   } else {
     swipeThumb.style.transform = `translateX(0px)`;
   }
-});
+}
+
+// Event untuk Laptop (Mouse)
+swipeThumb.addEventListener('mousedown', startDrag);
+document.addEventListener('mousemove', moveDrag);
+document.addEventListener('mouseup', endDrag);
+
+// Event untuk HP (Touch) - PASTIKAN MENGGUNAKAN E.TOUCHES
+swipeThumb.addEventListener('touchstart', startDrag, { passive: true });
+document.addEventListener('touchmove', moveDrag, { passive: true });
+document.addEventListener('touchend', endDrag);
 
 // --- Fungsi Menjawab Panggilan ---
 function answerCall() {
