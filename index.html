@@ -92,11 +92,9 @@
       </div>
 
       <div class="bottom-buttons">
-        <!-- Ikon Telepon Darurat di Lockscreen -->
         <button id="emergency-btn" class="round-btn emergency" aria-label="Telepon Darurat">
           <img src="telepon.png" alt="" class="btn-icon" onerror="this.outerHTML='📞'">
         </button>
-        <!-- Ikon Kamera di Lockscreen (Menggunakan .png) -->
         <button id="camera-btn-lockscreen" class="round-btn" aria-label="Kamera">
           <img src="kamera.png" alt="" class="btn-icon" onerror="this.outerHTML='📷'">
         </button>
@@ -199,10 +197,11 @@
         <h1 id="caller-name" style="font-size: 36px; font-weight: 500;">Erine</h1>
       </div>
       <div style="display: flex; justify-content: space-around; margin-bottom: 50px;">
+        <!-- Tombol Tolak -->
         <button id="decline-call-btn" style="width: 70px; height: 70px; border-radius: 50%; border: none; background: #ff3b30; color: white; font-size: 24px; cursor: pointer; display: flex; justify-content: center; align-items: center;">✕</button>
-        <button id="accept-call-btn" style="width: 70px; height: 70px; border-radius: 50%; border: none; background: #34C759; cursor: pointer; display: flex; justify-content: center; align-items: center;">
-          <img src="telepon.jpg" alt="Angkat" style="width: 40px; height: 40px; object-fit: contain; border-radius: 50%;">
-        </button>
+        
+        <!-- Tombol Angkat (Menggunakan Emoji) -->
+        <button id="accept-call-btn" style="width: 70px; height: 70px; border-radius: 50%; border: none; background: #34C759; color: white; font-size: 32px; cursor: pointer; display: flex; justify-content: center; align-items: center;">📞</button>
       </div>
     </div>
 
