@@ -79,21 +79,69 @@ document.querySelectorAll('.app').forEach(app => {
   });
 });
 
-// ===== LOGIKA TOMBOL PANGGILAN ERINE =====
+// ===== LOGIKA PANGGILAN ERINE =====
+let callTimerInterval = null;
+let callDuration = 0;
+let suaraErine = null;
+
+// 1. Tombol Tolak Panggilan
 document.getElementById('decline-call-btn').addEventListener('click', () => {
   document.getElementById('incoming-call-screen').style.display = 'none';
 });
 
+// 2. Tombol Angkat Panggilan
 document.getElementById('accept-call-btn').addEventListener('click', () => {
   document.getElementById('incoming-call-screen').style.display = 'none';
   
-  // ==========================================
-  // MEMUTAR SUARA ERINECALL.MPEG
-  // ==========================================
-  const suaraErine = new Audio('erinecall.mpeg');
+  // Tampilkan layar panggilan aktif
+  const activeCallScreen = document.getElementById('active-call-screen');
+  activeCallScreen.style.display = 'flex';
+  
+  // Reset durasi
+  callDuration = 0;
+  document.getElementById('call-timer').textContent = '00:00';
+  
+  // Putar suara erinecall.mpeg
+  suaraErine = new Audio('erinecall.mpeg');
   suaraErine.play().catch(error => {
     console.log("Gagal memutar suara: ", error);
   });
+  
+  // Jalankan timer (berdetak setiap detik)
+  callTimerInterval = setInterval(() => {
+    callDuration++;
+    const minutes = String(Math.floor(callDuration / 60)).padStart(2, '0');
+    const seconds = String(callDuration % 60).padStart(2, '0');
+    document.getElementById('call-timer').textContent = `${minutes}:${seconds}`;
+  }, 1000);
+  
+  // Deteksi jika suara selesai diputar, maka matikan panggilan otomatis
+  suaraErine.onended = () => {
+    endActiveCall();
+  };
+});
+
+// 3. Fungsi untuk mengakhiri panggilan aktif
+function endActiveCall() {
+  // Sembunyikan layar panggilan aktif
+  document.getElementById('active-call-screen').style.display = 'none';
+  
+  // Hentikan timer
+  if (callTimerInterval) {
+    clearInterval(callTimerInterval);
+    callTimerInterval = null;
+  }
+  
+  // Hentikan suara jika belum selesai
+  if (suaraErine) {
+    suaraErine.pause();
+    suaraErine.currentTime = 0;
+  }
+}
+
+// 4. Tombol Tutup Telepon (Tombol Merah)
+document.getElementById('end-call-btn').addEventListener('click', () => {
+  endActiveCall();
 });
 
 // ===== TOMBOL LAINNYA =====
