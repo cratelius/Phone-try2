@@ -28,6 +28,9 @@
         <div class="app" data-app="chat"><div class="app-icon"><img src="pesan.jpg" alt=""></div><span class="app-name">Pesan</span></div>
         <div class="app" data-app="blockblast"><div class="app-icon"><img src="blockblast.jpg" alt=""></div><span class="app-name">Block Blast</span></div>
         <div class="app" data-app="galeri"><div class="app-icon"><img src="galeri.jpg" alt=""></div><span class="app-name">Photos</span></div>
+        
+        <!-- IKON WATTPAD -->
+        <div class="app" data-app="wattpad"><div class="app-icon"><img src="wattpad.jpg" alt=""></div><span class="app-name">Wattpad</span></div>
       </div>
 
       <div class="page-dots"><span class="dot active"></span><span class="dot"></span></div>
@@ -55,28 +58,16 @@
       <div class="swipe-hint">Geser ke atas untuk membuka</div>
     </div>
 
-    <!-- ===== APLIKASI WHATSAPP (BARU) ===== -->
+    <!-- ===== APLIKASI WHATSAPP ===== -->
     <div class="screen app-screen" id="whatsapp-screen" style="background: #fff; z-index: 2;">
-      <!-- Header WA -->
       <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 16px;">
         <button class="back-btn" data-target="whatsapp-screen" style="color: #000; font-size: 28px; margin-right: 0;">←</button>
-        <div style="display: flex; gap: 15px; color: #000; font-size: 20px;">
-          <span>📷</span>
-          <span>➕</span>
-        </div>
+        <div style="display: flex; gap: 15px; color: #000; font-size: 20px;"><span>📷</span><span>➕</span></div>
       </div>
-      
-      <!-- Judul Chat -->
       <h1 style="font-size: 32px; font-weight: bold; padding: 0 16px; margin-bottom: 10px; color: #000;">Chat</h1>
-
-      <!-- Search Bar -->
       <div style="padding: 0 16px; margin-bottom: 15px;">
-        <div style="background: #f0f0f0; border-radius: 20px; padding: 8px 15px; display: flex; align-items: center; color: #888; font-size: 15px;">
-          🔍 Tanya Meta AI atau Cari
-        </div>
+        <div style="background: #f0f0f0; border-radius: 20px; padding: 8px 15px; display: flex; align-items: center; color: #888; font-size: 15px;">🔍 Tanya Meta AI atau Cari</div>
       </div>
-
-      <!-- Filter Pills -->
       <div style="display: flex; gap: 10px; padding: 0 16px; margin-bottom: 15px; overflow-x: auto; white-space: nowrap;">
         <span style="background: #dcf8c6; color: #000; padding: 5px 15px; border-radius: 20px; font-size: 14px;">Semua</span>
         <span style="background: #f0f0f0; color: #333; padding: 5px 15px; border-radius: 20px; font-size: 14px;">Belum Dibaca</span>
@@ -84,12 +75,9 @@
         <span style="background: #f0f0f0; color: #333; padding: 5px 15px; border-radius: 20px; font-size: 14px;">Grup</span>
         <span style="background: #f0f0f0; color: #333; padding: 5px 15px; border-radius: 20px; font-size: 14px;">➕</span>
       </div>
-
-      <!-- Chat List -->
       <div style="flex: 1; overflow-y: auto;">
         <!-- Erine -->
         <div class="chat-item" style="display: flex; align-items: center; padding: 12px 16px; border-bottom: 1px solid #f0f0f0; cursor: pointer;">
-          <!-- Ganti src dengan erine_profile.jpg jika ada -->
           <div style="width: 50px; height: 50px; border-radius: 50%; background: #ccc; margin-right: 15px; overflow: hidden; border: 2px solid #25D366;">
             <img src="erine_profile.jpg" alt="Erine" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'">
           </div>
@@ -138,13 +126,11 @@
           </div>
         </div>
         
-        <!-- Info Enkripsi -->
         <div style="text-align: center; color: #888; font-size: 12px; margin-top: 20px;">
           🔒 Pesan pribadi Anda terenkripsi secara end-to-end
         </div>
       </div>
 
-      <!-- Bottom Nav (Palsu) -->
       <div style="display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #eee; background: #fff; color: #666; font-size: 12px;">
         <div style="text-align: center;"><div style="font-size: 20px;">💬</div>Pembaruan</div>
         <div style="text-align: center;"><div style="font-size: 20px;">📞</div>Panggilan</div>
@@ -152,6 +138,18 @@
         <div style="text-align: center; color: #000; font-weight: bold;"><div style="font-size: 20px;">💬</div>Chat</div>
         <div style="text-align: center;"><div style="font-size: 20px;">⚙️</div>Pengaturan</div>
       </div>
+    </div>
+
+    <!-- ===== APLIKASI WATTPAD (IFRAME) ===== -->
+    <div class="screen app-screen" id="wattpad-screen" style="background: #fff; z-index: 2; padding: 0; display: flex; flex-direction: column;">
+      <!-- Header Kecil untuk Tombol Kembali -->
+      <div style="padding: 10px; background: #ff6600; display: flex; align-items: center;">
+        <button class="back-btn" data-target="wattpad-screen" style="color: #fff; font-size: 24px; margin: 0; background: rgba(0,0,0,0.2); border-radius: 50%; width: 36px; height: 36px; display: flex; justify-content: center; align-items: center; border: none; cursor: pointer;">←</button>
+        <span style="color: white; font-weight: bold; margin-left: 15px; font-size: 16px;">Wattpad</span>
+      </div>
+      
+      <!-- Iframe Memuat Wattpad Asli -->
+      <iframe src="https://www.wattpad.com/user/Cratelius" style="flex: 1; width: 100%; height: 100%; border: none;"></iframe>
     </div>
 
     <!-- ===== APLIKASI CHAT ===== -->
@@ -220,12 +218,10 @@
 
     <!-- ===== LAYAR PANGGILAN MASUK ===== -->
     <div class="screen" id="incoming-call-screen" style="z-index: 999; background: linear-gradient(180deg, #1c1c1e 0%, #000 100%); color: white; display: none; flex-direction: column; justify-content: space-between; padding: 40px 20px;">
-      
       <div style="text-align: center; margin-top: 20px;">
         <p style="font-size: 20px; opacity: 0.8; margin-bottom: 10px;">Panggilan Masuk...</p>
         <h1 id="caller-name" style="font-size: 36px; font-weight: 500;">Erine</h1>
       </div>
-
       <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 30px;">
         <div id="swipe-container" style="width: 100%; max-width: 280px; height: 70px; background: rgba(255,255,255,0.15); border-radius: 35px; position: relative; display: flex; align-items: center; padding: 5px;">
           <div id="swipe-thumb" style="width: 60px; height: 60px; background: #34C759; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 28px; cursor: pointer; position: absolute; left: 5px; transition: transform 0.1s;">📞</div>
@@ -234,14 +230,12 @@
       </div>
     </div>
 
-    <!-- ===== LAYAR PANGGILAN AKTIF (iOS STYLE) ===== -->
+    <!-- ===== LAYAR PANGGILAN AKTIF ===== -->
     <div class="screen" id="active-call-screen" style="z-index: 999; background: linear-gradient(180deg, #1c1c1e 0%, #000 100%); color: white; display: none; flex-direction: column; justify-content: space-between; padding: 40px 20px;">
-      
       <div style="text-align: center; margin-top: 20px;">
         <h1 id="active-caller-name" style="font-size: 36px; font-weight: 500; margin-bottom: 5px;">Erine</h1>
         <p id="call-timer" style="font-size: 20px; opacity: 0.8;">00:00</p>
       </div>
-
       <div style="display: flex; justify-content: space-around; margin-top: 50px; padding: 0 20px;">
         <div style="display: flex; flex-direction: column; align-items: center;">
           <button id="btn-mute" style="width: 70px; height: 70px; border-radius: 50%; border: none; background: rgba(255,255,255,0.15); color: white; font-size: 24px; cursor: pointer;">🎤</button>
@@ -256,7 +250,6 @@
           <span style="font-size: 12px; margin-top: 8px; opacity: 0.8;">FaceTime</span>
         </div>
       </div>
-
       <div style="display: flex; justify-content: center; margin-bottom: 30px;">
         <button id="end-call-btn" style="width: 70px; height: 70px; border-radius: 50%; border: none; background: #ff3b30; color: white; font-size: 28px; cursor: pointer; display: flex; justify-content: center; align-items: center; transform: rotate(135deg);">📞</button>
       </div>
