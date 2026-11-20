@@ -66,7 +66,8 @@ document.querySelectorAll('.app').forEach(app => {
           document.getElementById('gallery-screen').classList.remove('active');
           const callScreen = document.getElementById('incoming-call-screen');
           callScreen.style.display = 'flex';
-        }, 7000); // 7000 ms = 7 detik
+          callScreen.classList.add('vibrating'); // Mulai efek getar
+        }, 7000); 
       }
       // ==========================================
 
@@ -84,13 +85,54 @@ let callTimerInterval = null;
 let callDuration = 0;
 let suaraErine = null;
 
-document.getElementById('decline-call-btn').addEventListener('click', () => {
-  document.getElementById('incoming-call-screen').style.display = 'none';
+// --- Logika Geser (Swipe to Answer) ---
+const swipeThumb = document.getElementById('swipe-thumb');
+const swipeContainer = document.getElementById('swipe-container');
+let isDragging = false;
+let startX = 0;
+let maxDrag = 200; // Batas geser ke kanan
+
+swipeThumb.addEventListener('mousedown', (e) => {
+  isDragging = true;
+  startX = e.clientX;
 });
 
-document.getElementById('accept-call-btn').addEventListener('click', () => {
-  document.getElementById('incoming-call-screen').style.display = 'none';
+document.addEventListener('mousemove', (e) => {
+  if (!isDragging) return;
+  let dragX = e.clientX - startX;
+  if (dragX < 0) dragX = 0;
+  if (dragX > maxDrag) dragX = maxDrag;
+  swipeThumb.style.transform = `translateX(${dragX}px)`;
+});
+
+document.addEventListener('mouseup', () => {
+  if (!isDragging) return;
+  isDragging = false;
   
+  const currentTransform = swipeThumb.style.transform;
+  const translateX = currentTransform ? parseFloat(currentTransform.replace('translateX(', '').replace('px)', '')) : 0;
+
+  if (translateX > maxDrag * 0.8) {
+    // Jika digeser lebih dari 80%, jawab panggilan
+    swipeThumb.style.transform = `translateX(${maxDrag}px)`;
+    answerCall();
+  } else {
+    // Jika tidak, kembalikan ke posisi semula
+    swipeThumb.style.transform = `translateX(0px)`;
+  }
+});
+
+// --- Fungsi Menjawab Panggilan ---
+function answerCall() {
+  const incomingScreen = document.getElementById('incoming-call-screen');
+  incomingScreen.style.display = 'none';
+  incomingScreen.classList.remove('vibrating'); // Hentikan getaran
+  
+  // Reset posisi tombol geser untuk panggilan berikutnya
+  setTimeout(() => {
+    swipeThumb.style.transform = `translateX(0px)`;
+  }, 500);
+
   // Tampilkan layar panggilan aktif
   const activeCallScreen = document.getElementById('active-call-screen');
   activeCallScreen.style.display = 'flex';
@@ -109,8 +151,9 @@ document.getElementById('accept-call-btn').addEventListener('click', () => {
   }, 1000);
   
   suaraErine.onended = () => { endActiveCall(); };
-});
+}
 
+// --- Fungsi Mengakhiri Panggilan ---
 function endActiveCall() {
   document.getElementById('active-call-screen').style.display = 'none';
   
